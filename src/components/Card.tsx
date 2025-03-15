@@ -2,97 +2,107 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Pokemon } from "../model/types";
 
-function Card({ id }: { id: number }) {
+function Card({ id, setSelectedID }: { id: number; setSelectedID: React.Dispatch<React.SetStateAction<number>> }) {
 
     const [pokemonDetails, setPokemonDetails] = useState<Pokemon | null>();
     const [pokemonDescription, setPokemonDescription] = useState<String>("");
 
-
     // upon load of card, fetch the pokemon details
     useEffect(() => {
-        const getPokemonDetails = () => axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
-        getPokemonDetails().then((response) => {
+        axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`).then(response => {
             setPokemonDetails(response.data);
-            // console.log(response.data);
         });
 
-        // const description = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id}/`);
-        // // setPokemonDescription(description.data.flavor_text_entries[0].flavor_text);
-        // console.log(description.data.flavor_text_entries[0].flavor_text);
-
-        const getPokemonDescription = () => axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id}/`);
-        getPokemonDescription().then((response) => {
-            // find the index of the first english description
+        axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id}/`).then(response => {
             let i = 0;
             for (i = 0; i < response.data.flavor_text_entries.length; i++) {
                 if (response.data.flavor_text_entries[i].language.name === "en") {
                     break;
                 }
             }
-
             setPokemonDescription(response.data.flavor_text_entries[i].flavor_text);
-            console.log(response.data.flavor_text_entries[i].flavor_text);
         });
     }, []);
 
-    // construct image url
+    // construct image URL
     let pokeID = id.toString();
+    while (pokeID.length < 3) pokeID = "0" + pokeID;
 
-    // add padding 0s to the id if needed
-    while (pokeID.length < 3)
-        pokeID = "0" + pokeID;
-
-    // lookup table for type badg background colors
+    // lookup table for type badge background colors
     const typeColors: { [key: string]: string } = {
-        normal: "bg-gray-400",
-        fire: "bg-red-500",
-        water: "bg-blue-500",
-        electric: "bg-yellow-500",
-        grass: "bg-green-500",
-        ice: "bg-blue-300",
-        fighting: "bg-red-800",
-        poison: "bg-purple-500",
-        ground: "bg-yellow-800",
-        flying: "bg-blue-300",
-        psychic: "bg-purple-900",
-        bug: "bg-green-800",
-        rock: "bg-yellow-600",
-        ghost: "bg-indigo-700",
-        dark: "bg-gray-800",
-        dragon: "bg-blue-800",
-        steel: "bg-gray-600",
-        fairy: "bg-pink-500",
-    }
+        normal: "#A8A878",
+        fire: "#F08030",
+        water: "#6890F0",
+        electric: "#F8D030",
+        grass: "#78C850",
+        ice: "#98D8D8",
+        fighting: "#C03028",
+        poison: "#A040A0",
+        ground: "#E0C068",
+        flying: "#A890F0",
+        psychic: "#F85888",
+        bug: "#A8B820",
+        rock: "#B8A038",
+        ghost: "#705898",
+        dark: "#705848",
+        dragon: "#7038F8",
+        steel: "#B8B8D0",
+        fairy: "#EE99AC",
+    };
+
+    // Function to convert hex to RGBA with transparency for washed-out effect
+    const hexToRGBA = (hex: string, alpha: number) => {
+        const r = parseInt(hex.substring(1, 3), 16);
+        const g = parseInt(hex.substring(3, 5), 16);
+        const b = parseInt(hex.substring(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    };
+
+    // Get the primary type color for both text background and badge
+    const firstType = pokemonDetails?.types?.[0]?.type?.name || "normal";
+    const bgColor = hexToRGBA(typeColors[firstType], 0.1); // Lighter, transparent version for the text background
 
     return (
-        <div className="card rounded-4xl bg-base-100 w-96 shadow-sm p-8 px-4 basis-1/5 min-w-80 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl">
+        <div className="card rounded-4xl bg-base-100 w-96 shadow-sm p-8 px-4 basis-1/5 min-w-80 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02]"
+            onClick={() => { 
+                (document.getElementById('my_modal_2') as HTMLDialogElement).showModal();
+                setSelectedID(id); 
+            }}>
+            <div className="relative">
+                {/* Washed-out background Pokémon name */}
+                <p className="text-9xl absolute -translate-x-36 translate-y-36 font-bold w-fit"
+                    style={{ color: bgColor, padding: "5px 10px", borderRadius: "10px" }}>
+                    {pokemonDetails?.name.toUpperCase()}
+                </p>
+                <p className="text-9xl absolute -translate-x-5 translate-y-8 font-bold w-fit"
+                    style={{ color: bgColor, padding: "5px 10px", borderRadius: "10px" }}>
+                    {pokemonDetails?.name.toUpperCase()}
+                </p>
+            </div>
             <figure>
                 <img
                     src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
-                    className="drop-shadow-xl" />
+                    className="drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl" />
             </figure>
-            <div className="card-body p-4">
-                {/* POKEMON ID */}
+            <div className="card-body p-4 z-10">
+                {/* Pokémon ID */}
                 <h3 className="text-gray-500">#{pokeID}</h3>
-                {/* relocate this to expanded view */}
-                {/* remove unkown character */}
-                {/* <p>{pokemonDescription.replace("", "")}</p> */}
 
-                {/* POKEMON TYPE BADGE */}
+                {/* Pokémon Type Badge */}
                 <div className="flex flex-row justify-between gap-4">
                     <h2 className="card-title">{pokemonDetails?.name.toUpperCase()}</h2>
 
                     <div className="flex flex-row gap-2 justify-end w-full">
-                        {pokemonDetails?.types.map((type, index) =>
-                            <span key={index} className={"text-white rounded-full badge shadow-sm h-8 w-fit p-3 border-0  " + typeColors[type.type.name]}>
+                        {pokemonDetails?.types.map((type, index) => (
+                            <span key={index} 
+                                className="text-white rounded-full badge shadow-sm h-8 w-fit p-3 border-0"
+                                style={{ backgroundColor: typeColors[type.type.name] }}>
                                 {type.type.name}
                             </span>
-                        )}
+                        ))}
                     </div>
                 </div>
-
             </div>
-
         </div>
     );
 }
