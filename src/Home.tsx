@@ -20,8 +20,8 @@ function Home() {
   
 
   return (
-    <>
-    <div className='flex flex-row flex-wrap justify-start gap-4'>
+    <div className='p-12'>
+    <div className='flex flex-row flex-wrap justify-center gap-4 w-full'>
 
       {/* call cards with id from 1 to 10 */}
       {[...Array(1000)].map((_, index) => (
@@ -30,7 +30,7 @@ function Home() {
     </div>
 
       <button className='btn' onClick={fetchPokemon}>fetch</button>
-    </>
+    </div>
   )
 }
 

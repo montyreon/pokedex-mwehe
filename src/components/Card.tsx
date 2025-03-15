@@ -42,21 +42,50 @@ function Card({ id }: { id: number }) {
     while (pokeID.length < 3)
         pokeID = "0" + pokeID;
 
-    const imgUrl = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`
+    // lookup table for type badg background colors
+    const typeColors: { [key: string]: string } = {
+        normal: "bg-gray-400",
+        fire: "bg-red-500",
+        water: "bg-blue-500",
+        electric: "bg-yellow-500",
+        grass: "bg-green-500",
+        ice: "bg-blue-100",
+        fighting: "bg-red-800",
+        poison: "bg-purple-500",
+        ground: "bg-yellow-800",
+        flying: "bg-blue-300",
+        psychic: "bg-purple-800",
+        bug: "bg-green-800",
+        rock: "bg-yellow-600",
+        ghost: "bg-purple-600",
+        dark: "bg-gray-800",
+        dragon: "bg-blue-800",
+        steel: "bg-gray-600",
+        fairy: "bg-pink-500",
+    }
 
     return (
-        <div className="card bg-base-100 w-96 shadow-sm">
+        <div className="card rounded-4xl bg-base-100 w-96 shadow-sm p-8 px-4">
             <figure>
                 <img
-                    src={imgUrl}
-                    alt="Shoes" />
+                    src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
+                    className="drop-shadow-xl" />
             </figure>
             <div className="card-body">
+                {/* POKEMON ID */}
                 <h3 className="">#{pokeID}</h3>
                 <h2 className="card-title">{pokemonDetails?.name.toUpperCase()}</h2>
                 {/* remove unkown character */}
-                <p>{pokemonDescription.replace("","")}</p> 
+                <p>{pokemonDescription.replace("", "")}</p>
 
+            </div>
+            {/* POKEMON TYPE BADGE */}
+            <div className="flex flex-row gap-2 justify-end w-full px-6">
+                {pokemonDetails?.types.map((type, index) =>
+                    <span key={index} className={"text-white rounded-full badge shadow-sm h-8 w-fit p-3 border-0  " + typeColors[type.type.name]}>
+                        {type.type.name}
+                    </span>
+                )}
             </div>
         </div>
     );
