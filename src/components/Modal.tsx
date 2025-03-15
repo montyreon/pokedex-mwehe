@@ -75,7 +75,7 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                 <div className="flex flex-row gap-8">
                     {/* POKEMON CARD */}
                     <section className="flex flex-col items-center gap-6">
-                        <figure className="bg-yellow-50 border-8 border-pokeyellow rounded-3xl px-2">
+                        <figure className="bg-yellow-50 border-8 border-pokeyellow rounded-3xl px-2 basis-1/3">
                             <img
                                 src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
                                 className="drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl"
@@ -99,10 +99,15 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                             </div>
                             <button onClick={() => changePokemon(previewedPokemon + 1)} className="btn bg-gray-800 text-white border-0">▶</button>
                         </div>
+                        <div className="flex flex-row grow justify-center items-end w-full gap-2">
+                            <div className="text-white text-sm text-center">
+                                Click anywhere outside or press <kbd className="kbd text-black">esc</kbd> to exit.
+                            </div>
+                        </div>
                     </section>
 
                     {/* POKEMON DETAILS */}
-                    <section className="flex flex-col card shadow-sm rounded-4xl bg-pokedarkred/50 p-4 text-white gap-4">
+                    <section className="flex flex-col card shadow-sm rounded-4xl bg-pokedarkred/50 p-4 text-white gap-4 basis-2/3">
                         <div className="flex card bg-pokedarkred p-4 px-6 rounded-3xl">
 
                             {/* pokemon name & id */}
@@ -201,6 +206,9 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                     </section>
                 </div>
             </div>
+            <form method="dialog" className="modal-backdrop">
+                <button>close</button>
+            </form>
         </dialog>
     );
 }
