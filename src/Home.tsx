@@ -2,6 +2,7 @@
 import Card from './components/Card';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Modal } from './components/Modal';
 
 function Home() {
   const [pokemonObjects, setPokemonObjects] = useState([]);
@@ -23,15 +24,7 @@ function Home() {
 
   return (
     <div className='p-12'>
-      <dialog id="my_modal_2" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">Current selected ID: {selectedPokemon}</p>
-        </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
+      <Modal selectedPokemon={selectedPokemon} />
       <div className='flex flex-row flex-wrap justify-center gap-6 w-full'>
 
         {/* call cards with id from 1 to 1000 */}
