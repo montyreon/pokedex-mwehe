@@ -64,44 +64,71 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
 
 
     return (
-        <dialog id="my_modal_2" className="modal w-auto h-auto">
+        <dialog id="my_modal_2" className="modal w-auto">
 
-            <div className="modal-box max-w-[1080px] rounded-4xl p-10">
+            <div className="modal-box max-w-[1080px] rounded-4xl p-10 bg-pokered max-h-[90vh] overflow-y-auto">
                 <div className="flex flex-row gap-8">
                     {/* POKEMON CARD */}
-                    <div>
-                        <figure>
+                    <div className="flex flex-col items-center gap-6">
+                        <figure className="bg-yellow-50 border-8 border-pokeyellow rounded-3xl px-2">
                             <img
                                 src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
                                 className="drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl" />
                         </figure>
+                        {/* height & weight */}
+                        <div className="stats bg-pokedarkred text-white shadow">
+                            <div className="stat">
+                                <div className="stat-figure text-primary">
+
+                                </div>
+                                <div className="stat-title text-white">Height</div>
+                                <div className="stat-value text-2xl"> {pokemonDetails?.height ? pokemonDetails.height / 10 : "n/a"} m</div>
+                            </div>
+
+                            <div className="stat">
+                                <div className="stat-figure text-secondary">
+
+                                </div>
+                                <div className="stat-title text-white">Weight</div>
+                                <div className="stat-value text-2xl"> {pokemonDetails?.weight ? pokemonDetails.weight / 10 : "n/a"} kg</div>
+                            </div>
+
+                        </div>
                     </div>
 
                     {/* POKEMON DETAILS */}
-                    <div className="flex flex-col card shadow-lg p-4 rounded-3xl bg-pokecream">
-                        {/* pokemon name & id */}
-                        <h3 className="font-bold text-2xl">#{selectedPokemon} {pokemonDetails?.name.toUpperCase()}</h3>
+                    <div className="flex flex-col card shadow-sm rounded-4xl bg-pokedarkred/50 p-4 text-white gap-4">
+                        <div className="flex card bg-pokedarkred p-4 rounded-3xl">
 
-                        {/* pokemon category */}
-                        <p className="text-gray-600 italic">{pokemonCategory}</p>
+                            {/* pokemon name & id */}
+                            <h3 className="font-bold text-4xl">#{selectedPokemon} {pokemonDetails?.name.toUpperCase()}</h3>
 
-                        {/* pokemon description */}
-                        <p className="py-4">{pokemonDescription}</p>
+                            <div className="flex flex-row justify-start gap-3 items-center mt-1">
 
-                        {/* pokemon types */}
-                        <div className="flex gap-2 mb-4">
-                            {pokemonDetails?.types.map((type, index) => (
-                                <span key={index} className="text-white rounded-full px-3 py-1 text-sm font-semibold"
-                                    style={{ backgroundColor: typeColors[type.type.name] }}>
-                                    {type.type.name}
-                                </span>
-                            ))}
+                                {/* pokemon category */}
+                                <p className="text-pokeyellow text-xl italic">{pokemonCategory}</p>
+                                {/* pokemon types */}
+
+                                <div className="flex gap-2">
+                                    {pokemonDetails?.types.map((type, index) => (
+                                        <span key={index} className="text-white rounded-full px-3 py-1 text-sm font-semibold"
+                                            style={{ backgroundColor: typeColors[type.type.name] }}>
+                                            {type.type.name}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* pokemon description */}
+                            <p className="pt-2">{pokemonDescription}</p>
                         </div>
 
+
+
                         {/* weaknesses */}
-                        <div className="mt-4">
-                            <h4 className="font-bold text-lg">weaknesses</h4>
-                            <div className="flex flex-row gap-2">
+                        <div className="card p-4 bg-pokedarkred rounded-3xl flex flex-col gap-1">
+                            <h4 className="font-bold text-lg">Weaknesses</h4>
+                            <div className="flex flex-row gap-2 px-2">
                                 {/* convert the Types[] to array first; also rearrange alphabetically */}
                                 {pokemonDetails?.types && getWeakness(pokemonDetails.types.map((t) => t.type.name)).sort().map((weakness) => (
 
@@ -111,23 +138,24 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                             </div>
                         </div>
 
-                        {/* height & weight */}
-                        <div className="mt-4">
-                            <h4 className="font-bold text-lg">physical attributes</h4>
-                            <p><strong>height:</strong> {pokemonDetails?.height ? pokemonDetails.height / 10 : "n/a"} m</p>
-                            <p><strong>weight:</strong> {pokemonDetails?.weight ? pokemonDetails.weight / 10 : "n/a"} kg</p>
-                        </div>
 
-                        {/* stats */}
-                        <div className="mt-4">
-                            <h4 className="font-bold text-lg">base stats</h4>
+
+                        {/* Stats */}
+                        <div className="mt-4 w-min card card-body text-white">
+                            <h4 className="font-bold text-lg">Base Stats</h4>
                             <ul className="list-none mt-2">
-                                {pokemonDetails?.stats.map((stat, index) => (
-                                    <li key={index} className="flex justify-between">
-                                        <span className="capitalize">{stat.stat.name.replace("-", " ")}:</span>
-                                        <span className="font-bold">{stat.base_stat}</span>
-                                    </li>
-                                ))}
+                                {pokemonDetails?.stats.map((stat, index) => {
+                                    const normalizedValue = (stat.base_stat / 255) * 100; // normalize stat before graphing
+                                    return (
+                                        <li key={index} className="flex flex-col gap-1">
+                                            <div className="flex justify-between">
+                                                <span className="capitalize">{stat.stat.name.replace("-", " ")}:</span>
+                                                <span className="font-bold">{stat.base_stat}</span>
+                                            </div>
+                                            <progress className="progress progress-accent w-56" value={normalizedValue} max="100"></progress>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
 
