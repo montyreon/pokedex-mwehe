@@ -9,15 +9,20 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
     const [pokemonDetails, setPokemonDetails] = useState<Pokemon | null>(null);
     const [pokemonCategory, setPokemonCategory] = useState<string>("");
     const [evolutionChain, setEvolutionChain] = useState<{ name: string; id: number }[]>([]);
+    const [previewedPokemon, setPreviewedPokemon] = useState<number>(selectedPokemon);
+
+    useEffect(() => {
+        setPreviewedPokemon(selectedPokemon); // sync previewedPokemon when selectedPokemon changes
+    }, [selectedPokemon]);
 
     useEffect(() => {
         // fetch pokemon details
-        axios.get(`https://pokeapi.co/api/v2/pokemon/${selectedPokemon}`).then(response => {
+        axios.get(`https://pokeapi.co/api/v2/pokemon/${previewedPokemon}`).then(response => {
             setPokemonDetails(response.data);
         });
 
         // fetch pokemon species details (for description, category, and evolution chain url)
-        axios.get(`https://pokeapi.co/api/v2/pokemon-species/${selectedPokemon}/`).then(response => {
+        axios.get(`https://pokeapi.co/api/v2/pokemon-species/${previewedPokemon}/`).then(response => {
             const data = response.data;
 
             // find the first english description
@@ -36,75 +41,75 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                 });
             }
         });
-    }, [selectedPokemon]);
+    }, [previewedPokemon]);
 
     // function to extract evolution chain names & ids recursively
     const extractEvolutionChain = (chain: any): { name: string; id: number }[] => {
         let evolutionStages: { name: string; id: number }[] = [];
-        let currentStage = chain;
 
-        while (currentStage) {
-            const speciesURL = currentStage.species.url;
+        const traverseChain = (node: any) => {
+            if (!node) return;
+            const speciesURL = node.species.url;
             const id = parseInt(speciesURL.split("/").slice(-2, -1)[0]); // extract id from url
-            evolutionStages.push({ name: currentStage.species.name, id });
+            evolutionStages.push({ name: node.species.name, id });
 
-            if (currentStage.evolves_to.length > 0) {
-                currentStage = currentStage.evolves_to[0]; // take the first evolution path
-            } else {
-                break;
-            }
-        }
+            node.evolves_to.forEach(traverseChain); // handle multiple evolutions
+        };
 
+        traverseChain(chain);
         return evolutionStages;
     };
 
     // construct image URL
-    let pokeID = selectedPokemon.toString();
-    while (pokeID.length < 3) pokeID = "0" + pokeID;
+    let pokeID = previewedPokemon.toString().padStart(3, "0");
 
+    const changePokemon = (newID: number) => {
+        if (newID > 0 && newID < 1010) {
+            setPreviewedPokemon(newID);
+        }
+    };
 
     return (
         <dialog id="my_modal_2" className="modal w-auto">
-
             <div className="modal-box max-w-[1080px] rounded-4xl p-10 bg-pokered glass max-h-[90vh] overflow-y-auto">
                 <div className="flex flex-row gap-8">
                     {/* POKEMON CARD */}
-                    <div className="flex flex-col items-center gap-6">
+                    <section className="flex flex-col items-center gap-6">
                         <figure className="bg-yellow-50 border-8 border-pokeyellow rounded-3xl px-2">
                             <img
                                 src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
-                                className="drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl" />
+                                className="drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl"
+                            />
                         </figure>
                         {/* height & weight */}
                         <div className="stats bg-pokedarkred text-white shadow">
                             <div className="stat">
-                                <div className="stat-figure text-primary">
-
-                                </div>
                                 <div className="stat-title text-white">Height</div>
                                 <div className="stat-value text-2xl"> {pokemonDetails?.height ? pokemonDetails.height / 10 : "n/a"} m</div>
                             </div>
-
                             <div className="stat">
-                                <div className="stat-figure text-secondary">
-
-                                </div>
                                 <div className="stat-title text-white">Weight</div>
                                 <div className="stat-value text-2xl"> {pokemonDetails?.weight ? pokemonDetails.weight / 10 : "n/a"} kg</div>
                             </div>
-
                         </div>
-                    </div>
+                        <div className="flex flex-row gap-4 justify-center items-center">
+                            <button onClick={() => changePokemon(previewedPokemon - 1)} className="btn bg-gray-800 text-white border-0">◀</button>
+                            <div className="bg-gray-50 rounded-2xl drop-shadow-lg">
+                                <img className="drop-shadow-md" src={pokemonDetails?.sprites.front_default} alt={"sprite of " + pokemonDetails?.name} />
+                            </div>
+                            <button onClick={() => changePokemon(previewedPokemon + 1)} className="btn bg-gray-800 text-white border-0">▶</button>
+                        </div>
+                    </section>
 
                     {/* POKEMON DETAILS */}
-                    <div className="flex flex-col card shadow-sm rounded-4xl bg-pokedarkred/50 p-4 text-white gap-4">
+                    <section className="flex flex-col card shadow-sm rounded-4xl bg-pokedarkred/50 p-4 text-white gap-4">
                         <div className="flex card bg-pokedarkred p-4 px-6 rounded-3xl">
 
                             {/* pokemon name & id */}
                             <div className="flex flex-row justify-between">
                                 <h3 className="font-bold text-4xl"> {pokemonDetails?.name.toUpperCase()}</h3>
                                 <div className="flex flex-col justify-start">
-                                    <p className="text-lg">#{selectedPokemon}</p>
+                                    <p className="text-lg">#{previewedPokemon}</p>
                                 </div>
                             </div>
 
@@ -193,14 +198,9 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                                 <p className="mt-2">no evolution data</p>
                             )}
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            {/* close button */}
-            <form method="dialog" className="modal-backdrop">
-                <button>close</button>
-            </form>
         </dialog>
     );
 }
