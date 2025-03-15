@@ -24,6 +24,9 @@ function Home() {
 
   return (
     <div className='p-12'>
+      <div className='w-full flex flex-row justify-center'>
+      </div>
+        
       <Modal selectedPokemon={selectedPokemon} />
       <div className='flex flex-row flex-wrap justify-center gap-6 w-full'>
 

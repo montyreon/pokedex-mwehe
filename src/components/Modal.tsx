@@ -58,84 +58,107 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
         return evolutionStages;
     };
 
+    // construct image URL
+    let pokeID = selectedPokemon.toString();
+    while (pokeID.length < 3) pokeID = "0" + pokeID;
+
+
     return (
-        <dialog id="my_modal_2" className="modal">
-            <div className="modal-box rounded-4xl p-10">
-                {/* pokemon name & id */}
-                <h3 className="font-bold text-2xl">#{selectedPokemon} {pokemonDetails?.name.toUpperCase()}</h3>
+        <dialog id="my_modal_2" className="modal w-auto h-auto">
 
-                {/* pokemon category */}
-                <p className="text-gray-600 italic">{pokemonCategory}</p>
+            <div className="modal-box max-w-[1080px] rounded-4xl p-10">
+                <div className="flex flex-row gap-8">
+                    {/* POKEMON CARD */}
+                    <div>
+                        <figure>
+                            <img
+                                src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
+                                className="drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl" />
+                        </figure>
+                    </div>
 
-                {/* pokemon description */}
-                <p className="py-4">{pokemonDescription}</p>
+                    {/* POKEMON DETAILS */}
+                    <div className="flex flex-col card shadow-lg p-4 rounded-3xl bg-pokecream">
+                        {/* pokemon name & id */}
+                        <h3 className="font-bold text-2xl">#{selectedPokemon} {pokemonDetails?.name.toUpperCase()}</h3>
 
-                {/* pokemon types */}
-                <div className="flex gap-2 mb-4">
-                    {pokemonDetails?.types.map((type, index) => (
-                        <span key={index} className="text-white rounded-full px-3 py-1 text-sm font-semibold"
-                            style={{ backgroundColor: typeColors[type.type.name] }}>
-                            {type.type.name}
-                        </span>
-                    ))}
-                </div>
+                        {/* pokemon category */}
+                        <p className="text-gray-600 italic">{pokemonCategory}</p>
 
-                {/* weaknesses */}
-                <div className="mt-4">
-                    <h4 className="font-bold text-lg">weaknesses</h4>
-                    <ul className="list-none mt-2">
-                        {/* convert the Types[] to array first; also rearrange alphabetically */}
-                        {pokemonDetails?.types && getWeakness(pokemonDetails.types.map((t) => t.type.name)).sort().map((weakness, index) => (
-                            <li key={index} className="flex justify-between">
-                                <span className="capitalize">{weakness}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                        {/* pokemon description */}
+                        <p className="py-4">{pokemonDescription}</p>
 
-                {/* height & weight */}
-                <div className="mt-4">
-                    <h4 className="font-bold text-lg">physical attributes</h4>
-                    <p><strong>height:</strong> {pokemonDetails?.height ? pokemonDetails.height / 10 : "n/a"} m</p>
-                    <p><strong>weight:</strong> {pokemonDetails?.weight ? pokemonDetails.weight / 10 : "n/a"} kg</p>
-                </div>
-
-                {/* stats */}
-                <div className="mt-4">
-                    <h4 className="font-bold text-lg">base stats</h4>
-                    <ul className="list-none mt-2">
-                        {pokemonDetails?.stats.map((stat, index) => (
-                            <li key={index} className="flex justify-between">
-                                <span className="capitalize">{stat.stat.name.replace("-", " ")}:</span>
-                                <span className="font-bold">{stat.base_stat}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                {/* evolution chain with images */}
-                <div className="mt-4">
-                    <h4 className="font-bold text-lg">evolution chain</h4>
-                    {evolutionChain.length > 0 ? (
-                        <div className="flex flex-row items-center gap-4 mt-2">
-                            {evolutionChain.map((evolution, index) => (
-                                <div key={index} className="flex flex-col items-center">
-                                    {/* evolution image */}
-                                    <img
-                                        src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${String(evolution.id).padStart(3, "0")}.png`}
-                                        alt={evolution.name}
-                                        className="w-20 h-20 object-contain"
-                                    />
-                                    {/* evolution name */}
-                                    <p className="capitalize text-sm">{evolution.name}</p>
-                                    {/* arrow if there's a next evolution */}
-                                    {index < evolutionChain.length - 1 && <span className="text-xl">→</span>}
-                                </div>
+                        {/* pokemon types */}
+                        <div className="flex gap-2 mb-4">
+                            {pokemonDetails?.types.map((type, index) => (
+                                <span key={index} className="text-white rounded-full px-3 py-1 text-sm font-semibold"
+                                    style={{ backgroundColor: typeColors[type.type.name] }}>
+                                    {type.type.name}
+                                </span>
                             ))}
                         </div>
-                    ) : (
-                        <p className="mt-2">no evolution data</p>
-                    )}
+
+                        {/* weaknesses */}
+                        <div className="mt-4">
+                            <h4 className="font-bold text-lg">weaknesses</h4>
+                            <div className="flex flex-row gap-2">
+                                {/* convert the Types[] to array first; also rearrange alphabetically */}
+                                {pokemonDetails?.types && getWeakness(pokemonDetails.types.map((t) => t.type.name)).sort().map((weakness) => (
+
+                                    <span className="text-white rounded-full px-3 py-1 text-sm font-semibold"
+                                        style={{ backgroundColor: typeColors[weakness] }}>{weakness}</span>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* height & weight */}
+                        <div className="mt-4">
+                            <h4 className="font-bold text-lg">physical attributes</h4>
+                            <p><strong>height:</strong> {pokemonDetails?.height ? pokemonDetails.height / 10 : "n/a"} m</p>
+                            <p><strong>weight:</strong> {pokemonDetails?.weight ? pokemonDetails.weight / 10 : "n/a"} kg</p>
+                        </div>
+
+                        {/* stats */}
+                        <div className="mt-4">
+                            <h4 className="font-bold text-lg">base stats</h4>
+                            <ul className="list-none mt-2">
+                                {pokemonDetails?.stats.map((stat, index) => (
+                                    <li key={index} className="flex justify-between">
+                                        <span className="capitalize">{stat.stat.name.replace("-", " ")}:</span>
+                                        <span className="font-bold">{stat.base_stat}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* evolution chain with images */}
+                        <div className="mt-4">
+                            <h4 className="font-bold text-lg">evolution chain</h4>
+                            {evolutionChain.length > 0 ? (
+                                <div className="flex flex-row items-center gap-4 mt-2">
+                                    {evolutionChain.map((evolution, index) => (
+                                        <div key={index} className="flex flex-row items-center">
+                                            {/* evolution image */}
+                                            <div className="flex flex-col">
+
+                                                <img
+                                                    src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${String(evolution.id).padStart(3, "0")}.png`}
+                                                    alt={evolution.name}
+                                                    className="w-20 h-20 object-contain"
+                                                />
+                                                {/* evolution name */}
+                                                <p className="capitalize text-sm">{evolution.name}</p>
+                                            </div>
+                                            {/* arrow if there's a next evolution */}
+                                            {index < evolutionChain.length - 1 && <span className="text-xl">→</span>}
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="mt-2">no evolution data</p>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
 
