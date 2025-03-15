@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Pokemon } from "../model/types";
+import { typeColors } from "../common/typeColors";
+import { getWeakness } from "../common/weakness";
 
 export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
     const [pokemonDescription, setPokemonDescription] = useState<string>("");
@@ -56,31 +58,9 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
         return evolutionStages;
     };
 
-    // lookup table for type colors
-    const typeColors: { [key: string]: string } = {
-        normal: "#A8A878",
-        fire: "#F08030",
-        water: "#6890F0",
-        electric: "#F8D030",
-        grass: "#78C850",
-        ice: "#98D8D8",
-        fighting: "#C03028",
-        poison: "#A040A0",
-        ground: "#E0C068",
-        flying: "#A890F0",
-        psychic: "#F85888",
-        bug: "#A8B820",
-        rock: "#B8A038",
-        ghost: "#705898",
-        dark: "#705848",
-        dragon: "#7038F8",
-        steel: "#B8B8D0",
-        fairy: "#EE99AC",
-    };
-
     return (
         <dialog id="my_modal_2" className="modal">
-            <div className="modal-box">
+            <div className="modal-box rounded-4xl p-10">
                 {/* pokemon name & id */}
                 <h3 className="font-bold text-2xl">#{selectedPokemon} {pokemonDetails?.name.toUpperCase()}</h3>
 
@@ -100,9 +80,25 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                     ))}
                 </div>
 
+                {/* weaknesses */}
+                <div className="mt-4">
+                    <h4 className="font-bold text-lg">weaknesses</h4>
+                    <ul className="list-none mt-2">
+                        {/* convert the Types[] to array first; also rearrange alphabetically */}
+                        {pokemonDetails?.types && getWeakness(pokemonDetails.types.map((t) => t.type.name)).sort().map((weakness, index) => (
+                            <li key={index} className="flex justify-between">
+                                <span className="capitalize">{weakness}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
                 {/* height & weight */}
-                <p><strong>height:</strong> {pokemonDetails?.height ? pokemonDetails.height / 10 : "n/a"} m</p>
-                <p><strong>weight:</strong> {pokemonDetails?.weight ? pokemonDetails.weight / 10 : "n/a"} kg</p>
+                <div className="mt-4">
+                    <h4 className="font-bold text-lg">physical attributes</h4>
+                    <p><strong>height:</strong> {pokemonDetails?.height ? pokemonDetails.height / 10 : "n/a"} m</p>
+                    <p><strong>weight:</strong> {pokemonDetails?.weight ? pokemonDetails.weight / 10 : "n/a"} kg</p>
+                </div>
 
                 {/* stats */}
                 <div className="mt-4">
@@ -123,20 +119,18 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                     {evolutionChain.length > 0 ? (
                         <div className="flex flex-row items-center gap-4 mt-2">
                             {evolutionChain.map((evolution, index) => (
-                                <>
-                                    <div key={index} className="flex flex-col items-center">
-                                        {/* evolution image */}
-                                        <img
-                                            src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${String(evolution.id).padStart(3, "0")}.png`}
-                                            alt={evolution.name}
-                                            className="w-20 h-20 object-contain"
-                                        />
-                                        {/* evolution name */}
-                                        <p className="capitalize text-sm">{evolution.name}</p>
-                                        {/* arrow if there's a next evolution */}
-                                    </div>
+                                <div key={index} className="flex flex-col items-center">
+                                    {/* evolution image */}
+                                    <img
+                                        src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${String(evolution.id).padStart(3, "0")}.png`}
+                                        alt={evolution.name}
+                                        className="w-20 h-20 object-contain"
+                                    />
+                                    {/* evolution name */}
+                                    <p className="capitalize text-sm">{evolution.name}</p>
+                                    {/* arrow if there's a next evolution */}
                                     {index < evolutionChain.length - 1 && <span className="text-xl">→</span>}
-                                </>
+                                </div>
                             ))}
                         </div>
                     ) : (
@@ -152,4 +146,3 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
         </dialog>
     );
 }
-

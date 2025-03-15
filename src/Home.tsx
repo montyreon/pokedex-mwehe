@@ -28,7 +28,7 @@ function Home() {
       <div className='flex flex-row flex-wrap justify-center gap-6 w-full'>
 
         {/* call cards with id from 1 to 1000 */}
-        {[...Array(20)].map((_, index) => (
+        {[...Array(50)].map((_, index) => (
           <Card key={index} id={index + 1} setSelectedID={setSelectedPokemon} />
         ))}
       </div>
