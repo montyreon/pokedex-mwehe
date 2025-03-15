@@ -21,7 +21,7 @@ function Home() {
 
   return (
     <div className='p-12'>
-    <div className='flex flex-row flex-wrap justify-center gap-4 w-full'>
+    <div className='flex flex-row flex-wrap justify-center gap-6 w-full'>
 
       {/* call cards with id from 1 to 10 */}
       {[...Array(1000)].map((_, index) => (

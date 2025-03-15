@@ -49,15 +49,15 @@ function Card({ id }: { id: number }) {
         water: "bg-blue-500",
         electric: "bg-yellow-500",
         grass: "bg-green-500",
-        ice: "bg-blue-100",
+        ice: "bg-blue-300",
         fighting: "bg-red-800",
         poison: "bg-purple-500",
         ground: "bg-yellow-800",
         flying: "bg-blue-300",
-        psychic: "bg-purple-800",
+        psychic: "bg-purple-900",
         bug: "bg-green-800",
         rock: "bg-yellow-600",
-        ghost: "bg-purple-600",
+        ghost: "bg-indigo-700",
         dark: "bg-gray-800",
         dragon: "bg-blue-800",
         steel: "bg-gray-600",
@@ -65,28 +65,34 @@ function Card({ id }: { id: number }) {
     }
 
     return (
-        <div className="card rounded-4xl bg-base-100 w-96 shadow-sm p-8 px-4">
+        <div className="card rounded-4xl bg-base-100 w-96 shadow-sm p-8 px-4 basis-1/5 min-w-80 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl">
             <figure>
                 <img
                     src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
                     className="drop-shadow-xl" />
             </figure>
-            <div className="card-body">
+            <div className="card-body p-4">
                 {/* POKEMON ID */}
-                <h3 className="">#{pokeID}</h3>
-                <h2 className="card-title">{pokemonDetails?.name.toUpperCase()}</h2>
+                <h3 className="text-gray-500">#{pokeID}</h3>
+                {/* relocate this to expanded view */}
                 {/* remove unkown character */}
-                <p>{pokemonDescription.replace("", "")}</p>
+                {/* <p>{pokemonDescription.replace("", "")}</p> */}
+
+                {/* POKEMON TYPE BADGE */}
+                <div className="flex flex-row justify-between gap-4">
+                    <h2 className="card-title">{pokemonDetails?.name.toUpperCase()}</h2>
+
+                    <div className="flex flex-row gap-2 justify-end w-full">
+                        {pokemonDetails?.types.map((type, index) =>
+                            <span key={index} className={"text-white rounded-full badge shadow-sm h-8 w-fit p-3 border-0  " + typeColors[type.type.name]}>
+                                {type.type.name}
+                            </span>
+                        )}
+                    </div>
+                </div>
 
             </div>
-            {/* POKEMON TYPE BADGE */}
-            <div className="flex flex-row gap-2 justify-end w-full px-6">
-                {pokemonDetails?.types.map((type, index) =>
-                    <span key={index} className={"text-white rounded-full badge shadow-sm h-8 w-fit p-3 border-0  " + typeColors[type.type.name]}>
-                        {type.type.name}
-                    </span>
-                )}
-            </div>
+
         </div>
     );
 }
