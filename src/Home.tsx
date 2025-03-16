@@ -58,18 +58,18 @@ function Home() {
 
   return (
     <div className='p-12'>
-      <div className=' flex flex-row justify-center gap-6 h-screen'>
+      <div className='flex flex-col-reverse sm:flex-row-reverse justify-center gap-8 sm:gap-0'>
         <Modal selectedPokemon={selectedPokemon} />
 
-        {/* card section */}
+        {/* CARDS SECTION */}
         <section className='flex flex-wrap justify-center gap-6 flex-[2]'>
-          {filteredPokemon.slice(0, 50).map(pokemon => (
+          {filteredPokemon.slice(0, 10).map(pokemon => (
             <Card key={pokemon.id} id={pokemon.id} setSelectedID={setSelectedPokemon} />
           ))}
         </section>
 
-        {/* filter controls */}
-        <section className='flex flex-col justify-center h-fit bg-pokered glass card rounded-3xl shadow-lg text-white p-8 gap-5 grow min-w-[300px] max-w-[500px]'>
+        {/* FILTER CONTROLS */}
+        <section className='flex flex-col justify-center h-fit bg-pokered glass card rounded-3xl shadow-lg text-white p-8 gap-5 grow min-w-[300px] max-w-[400px]'>
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pokémon_logo.svg/1200px-International_Pokémon_logo.svg.png" alt="" />
           <div className="flex flex-row items-center justify-between p-4 pb-0 pr-0 gap-4">
             <h3 className="font-bold text-4xl"> filter by:</h3>

@@ -71,10 +71,15 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
 
     return (
         <dialog id="my_modal_2" className="modal w-auto">
-            <div className="modal-box max-w-[1080px] rounded-4xl p-10 bg-pokered glass max-h-[90vh] overflow-y-auto">
-                <div className="flex flex-row gap-8">
+            <div className="modal-box max-w-[1080px] rounded-4xl p-4 sm:p-10 bg-pokered glass max-h-[90vh] overflow-y-auto">
+                <div className="flex flex-row justify-end pb-4 sticky top-0 z-50 sm:hidden">
+                    <button
+                    onClick={() => (document.getElementById('my_modal_2') as HTMLDialogElement).close()}
+                     className="rounded-full btn outline-0 shadow-black/40 shadow-md outline-transparent">X</button>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-8">
                     {/* POKEMON CARD */}
-                    <section className="flex flex-col items-center gap-6">
+                    <section className="flex flex-col items-center gap-6 h-fit">
                         <figure className="bg-yellow-50 border-8 border-pokeyellow rounded-3xl px-2 basis-1/3 w-full">
                             <img
                                 src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
@@ -101,7 +106,7 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                             <button onClick={() => changePokemon(previewedPokemon + 1)} className="btn bg-gray-800 text-white border-0">▶</button>
                         </div>
                         <div className="flex flex-row grow justify-center items-end w-full gap-2">
-                            <div className="text-white text-sm text-center">
+                            <div className="text-white text-sm text-center hidden sm:block">
                                 Click anywhere outside or press <kbd className="kbd text-black">esc</kbd> to exit.
                             </div>
                         </div>
@@ -112,8 +117,8 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                         <div className="flex card bg-pokedarkred p-4 px-6 rounded-3xl">
 
                             {/* pokemon name & id */}
-                            <div className="flex flex-row justify-between">
-                                <h3 className="font-bold text-4xl"> {pokemonDetails?.name.toUpperCase()}</h3>
+                            <div className="flex flex-row justify-between flex-wrap w-full">
+                                <h3 className="font-bold text-4xl line-clamp-1"> {pokemonDetails?.name.toUpperCase()}</h3>
                                 <div className="flex flex-col justify-start">
                                     <p className="text-lg">#{previewedPokemon}</p>
                                 </div>
@@ -125,7 +130,7 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                                 <p className="text-pokeyellow text-xl italic">{pokemonCategory}</p>
                                 {/* pokemon types */}
 
-                                <div className="flex items-start gap-2">
+                                <div className="flex items-start gap-2 flex-wrap">
                                     {pokemonDetails?.types.map((type, index) => (
                                         <span key={index} className="text-white rounded-full px-3 py-1 text-md font-semibold"
                                             style={{ backgroundColor: typeColors[type.type.name] }}>
@@ -144,7 +149,7 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                         {/* weaknesses */}
                         <div className="card p-4 bg-pokedarkred rounded-3xl flex flex-col gap-1 px-6">
                             <h4 className="font-bold text-lg">Weaknesses</h4>
-                            <div className="flex flex-row gap-2 px-2">
+                            <div className="flex flex-row flex-wrap gap-2 px-2">
                                 {/* convert the Types[] to array first; also rearrange alphabetically */}
                                 {pokemonDetails?.types && getWeakness(pokemonDetails.types.map((t) => t.type.name)).sort().map((weakness) => (
 
