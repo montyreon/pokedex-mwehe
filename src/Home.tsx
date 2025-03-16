@@ -163,7 +163,11 @@ function Home() {
             <div className="flex justify-center w-full">
               <button
                 className='btn rounded-full bg-pokeyellow text-gray-800 border-0 shadow-md shadow-yellow-900 w-4/5'
-                onClick={applyFilters}
+                onClick={()=>{
+                  applyFilters();
+                  // also remove the "click to load more" card
+                  setPreviewCount(100);
+                }}
               >
                 apply
               </button>
