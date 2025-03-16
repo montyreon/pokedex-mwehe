@@ -40,7 +40,7 @@ function Card({ id, setSelectedID }: { id: number; setSelectedID: React.Dispatch
                 setSelectedID(id);
             }}>
             <div className={"relative " + (isImageLoading ? "hidden" : "block")}>
-                {/* washed-out background Pokémon name */}
+                {/* washed-out background Pokemon name */}
                 <p className="text-9xl absolute -translate-x-36 translate-y-36 font-bold w-fit"
                     style={{ color: bgColor, padding: "5px 10px", borderRadius: "10px" }}>
                     {pokemonDetails?.name.toUpperCase()}
@@ -52,7 +52,7 @@ function Card({ id, setSelectedID }: { id: number; setSelectedID: React.Dispatch
             </div>
             <figure>
                 {isImageLoading && (
-                    <div className="skeleton w-28 h-64 rounded-3xl bg-gray-200 animate-pulse grow"></div>
+                    <div className="skeleton w-28 h-64 rounded-3xl bg-gray-100 grow"></div>
                 )}
                 <img
 

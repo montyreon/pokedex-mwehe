@@ -6,19 +6,13 @@ import { Pokemon } from './model/types';
 import pokeball from './assets/pokeball.png';
 
 function Home() {
-  const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]); // stores the full pokémon catalog
-  const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]); // stores filtered pokémon
+
+  // POKEMON DATA FUNCTIONS  ========================================
+  const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]); // stores the full pokemon catalog
+  const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]); 
   const [selectedPokemon, setSelectedPokemon] = useState<number>(1);
 
-  // input fields for user typing (not applied yet)
-  const [tempSearchName, setTempSearchName] = useState('');
-  const [tempSearchId, setTempSearchId] = useState('');
-
-  // applied filter values
-  const [searchName, setSearchName] = useState('');
-  const [searchId, setSearchId] = useState('');
-
-  // fetch the full pokémon list (only names and ids)
+  // fetch the full pokemon list (only names and ids)
   useEffect(() => {
     const fetchAllPokemon = async () => {
       const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=1025`);
@@ -27,11 +21,23 @@ function Home() {
         name: pokemon.name,
       }));
       setAllPokemon(pokemonList);
-      setFilteredPokemon(pokemonList); // initially display all pokémon
+      setFilteredPokemon(pokemonList); // initially display all pokemon
     };
 
     fetchAllPokemon();
   }, []);
+
+
+  // FILTERING FUNCTIONS ========================================
+
+  // input fields for user typing (not applied yet)
+  const [tempSearchName, setTempSearchName] = useState('');
+  const [tempSearchId, setTempSearchId] = useState('');
+  const [previewCount, setPreviewCount] = useState<number>(10);
+
+  // applied filter values
+  const [searchName, setSearchName] = useState('');
+  const [searchId, setSearchId] = useState('');
 
   // apply filters only when "apply" is clicked
   const applyFilters = () => {
@@ -39,7 +45,7 @@ function Home() {
     setSearchId(tempSearchId);
   };
 
-  // update the displayed pokémon when filters change
+  // update the displayed pokemon when filters change
   useEffect(() => {
     setFilteredPokemon(
       allPokemon.filter(pokemon =>
@@ -59,13 +65,12 @@ function Home() {
 
   return (
     <>
-      <div className="navbar shadow-sm sticky top-0 z-50 backdrop-blur-2xl glass px-12">
-          <img src={pokeball} alt="pokeball" className='h-10'/>
+      <div className="navbar sticky top-0 z-50 backdrop-blur-2xl glass px-12 shadow-lg">
+        <img src={pokeball} alt="pokeball" className='h-10' />
         <div className="flex-1">
-          <a className="text-xl tex-white font-bold">Pokédex</a>
+          <a className="text-xl font-bold">Pokédex</a>
         </div>
         <div className="flex-none">
-
 
         </div>
       </div>
@@ -75,9 +80,30 @@ function Home() {
 
           {/* CARDS SECTION */}
           <section className='flex flex-wrap justify-start gap-6 flex-[2]'>
-            {filteredPokemon.slice(0, 100).map(pokemon => (
+            {filteredPokemon.slice(0, previewCount).map(pokemon => (
               <Card key={pokemon.id} id={pokemon.id} setSelectedID={setSelectedPokemon} />
             ))}
+            {/* click to load more (blank card) */}
+            <div className={"card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-0 " + (previewCount > 10 ? "hidden" : "block")}
+            onClick={() => {setPreviewCount(100)}}
+            >
+              <figure>
+                <div className="skeleton w-28 h-64 rounded-3xl bg-gray-100 text-gray-500 grow flex flex-col justify-center items-center">
+                  Click to load more...
+                </div>
+              </figure>
+              <div className="card-body p-4 pb-0 z-10">
+                <h3 className="text-gray-200">#----</h3>
+                <div className="flex flex-row justify-between gap-4 flex-wrap">
+                  <h2 className="card-title skeleton bg-gray-100 w-24 min-h-6 rounded-full"></h2>
+
+                  <div className="flex flex-row gap-2 justify-end w-full">
+                    <span className='badge skeleton text-gray-100 w-16'></span>
+                  </div>é
+                </div>
+              </div>
+            </div>
+
           </section>
 
           {/* FILTER CONTROLS */}
@@ -138,7 +164,7 @@ function Home() {
           <p>
             Pokémon images and data © {new Date().getFullYear()} Pokémon. <br />
             Pokémon and Pokémon character names are trademarks of Nintendo, Game Freak, and Creatures. <br />
-            This webpage uses data from <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer" className="underline">PokéAPI</a>.
+            This webpage uses data from <a href="https://pokeapi.co/" target="_blank" rel="noopener noreferrer" className="underline">PokeAPI</a>.
           </p>
         </aside>
         <nav>
