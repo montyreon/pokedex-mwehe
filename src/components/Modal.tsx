@@ -75,7 +75,7 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                 <div className="flex flex-row gap-8">
                     {/* POKEMON CARD */}
                     <section className="flex flex-col items-center gap-6">
-                        <figure className="bg-yellow-50 border-8 border-pokeyellow rounded-3xl px-2 basis-1/3">
+                        <figure className="bg-yellow-50 border-8 border-pokeyellow rounded-3xl px-2 basis-1/3 w-full">
                             <img
                                 src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
                                 className="drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl"
@@ -92,10 +92,11 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                                 <div className="stat-value text-2xl"> {pokemonDetails?.weight ? pokemonDetails.weight / 10 : "n/a"} kg</div>
                             </div>
                         </div>
+                        {/* LEFT RIGHT NAVIGATION */}
                         <div className="flex flex-row gap-4 justify-center items-center">
                             <button onClick={() => changePokemon(previewedPokemon - 1)} className="btn bg-gray-800 text-white border-0">◀</button>
                             <div className="bg-gray-50 rounded-2xl drop-shadow-lg">
-                                <img className="drop-shadow-md" src={pokemonDetails?.sprites.front_default} alt={"sprite of " + pokemonDetails?.name} />
+                                <img className="drop-shadow-md min-h-24 min-w-24" src={pokemonDetails?.sprites.front_default} alt={"sprite of " + pokemonDetails?.name} />
                             </div>
                             <button onClick={() => changePokemon(previewedPokemon + 1)} className="btn bg-gray-800 text-white border-0">▶</button>
                         </div>
