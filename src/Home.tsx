@@ -100,6 +100,13 @@ function Home() {
             {filteredPokemon.slice(0, previewCount).map(pokemon => (
               <Card key={pokemon.id} id={pokemon.id} setSelectedID={setSelectedPokemon} />
             ))}
+            {filteredPokemon.length === 0 &&
+
+              <div className='flex flex-col items-center justify-center gap-4 p-4'>
+                <h1 className='text-4xl font-bold text-pokered'>No Pokémon found</h1>
+                <p className='text-gray-800'>Try clearing the filters or check your search terms.</p>
+              </div>
+            }
             {/* click to load more (blank card) */}
             <div className={"card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-0 " + (previewCount > 10 ? "hidden" : "block")}
               onClick={() => { setPreviewCount(100) }}
@@ -139,7 +146,7 @@ function Home() {
             <div className="card bg-pokedarkred/30 rounded-2xl flex flex-col gap-1 text-gray-800 p-6">
               {/* name search input */}
               <label className="input w-full">
-              <Search className='text-gray-400' strokeWidth={1.75} />
+                <Search className='text-gray-400' strokeWidth={1.75} />
                 <input
                   type="search"
                   className="grow"
@@ -150,7 +157,7 @@ function Home() {
               </label>
               {/* pokemon id search input */}
               <label className="input w-full">
-              <StickyNote className='text-gray-400' strokeWidth={1.75} />
+                <StickyNote className='text-gray-400' strokeWidth={1.75} />
                 <input
                   type="number"
                   className="grow"
@@ -164,7 +171,7 @@ function Home() {
             <div className="flex justify-center w-full">
               <button
                 className='btn rounded-full bg-pokeyellow text-gray-800 border-0 shadow-md shadow-yellow-900 w-4/5'
-                onClick={()=>{
+                onClick={() => {
                   applyFilters();
                   // also remove the "click to load more" card
                   setPreviewCount(100);
@@ -178,12 +185,12 @@ function Home() {
 
       </div>
       {/* back to top button */}
-        <button
-          className={"btn border-0 text-base fixed bottom-8 left-1/2 transform -translate-x-1/2 py-4 sm:py-2 px-4 z-50 bg-pokeyellow text-gray-800 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-300 " + (showScrollButton ? "" : "opacity-0 z-[-1]")}
-          onClick={scrollToTop}
-        >
-          ↑ back to top
-        </button>
+      <button
+        className={"btn border-0 text-base fixed bottom-8 left-1/2 transform -translate-x-1/2 py-4 sm:py-2 px-4 z-50 bg-pokeyellow text-gray-800 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-300 " + (showScrollButton ? "" : "opacity-0 z-[-1]")}
+        onClick={scrollToTop}
+      >
+        ↑ back to top
+      </button>
 
       <footer className="footer footer-horizontal footer-center bg-pokedarkred text-primary-content p-10 glass">
         <aside className="text-center">
