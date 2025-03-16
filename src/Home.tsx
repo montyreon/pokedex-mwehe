@@ -9,7 +9,7 @@ function Home() {
 
   // POKEMON DATA FUNCTIONS  ========================================
   const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]); // stores the full pokemon catalog
-  const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]); 
+  const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]);
   const [selectedPokemon, setSelectedPokemon] = useState<number>(1);
 
   // fetch the full pokemon list (only names and ids)
@@ -63,6 +63,22 @@ function Home() {
     setSearchId('');
   };
 
+
+  // track if window scrolled down
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollButton(window.scrollY > 100); // Show when scrolled down 100px
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // smooth scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <>
       <div className="navbar sticky top-0 z-50 backdrop-blur-2xl glass px-12 shadow-lg">
@@ -75,17 +91,17 @@ function Home() {
         </div>
       </div>
       <div className='p-8 sm:p-12'>
-        <div className='flex flex-col-reverse sm:flex-row-reverse justify-center gap-8'>
+        <div className='flex flex-col-reverse md:flex-row-reverse justify-center items-center md:items-start gap-8'>
           <Modal selectedPokemon={selectedPokemon} />
 
           {/* CARDS SECTION */}
-          <section className='flex flex-wrap justify-start gap-6 flex-[2]'>
+          <section className='flex flex-wrap justify-center md:justify-start gap-6 flex-[2]'>
             {filteredPokemon.slice(0, previewCount).map(pokemon => (
               <Card key={pokemon.id} id={pokemon.id} setSelectedID={setSelectedPokemon} />
             ))}
             {/* click to load more (blank card) */}
             <div className={"card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-0 " + (previewCount > 10 ? "hidden" : "block")}
-            onClick={() => {setPreviewCount(100)}}
+              onClick={() => { setPreviewCount(100) }}
             >
               <figure>
                 <div className="skeleton w-28 h-64 rounded-3xl bg-gray-100 text-gray-500 grow flex flex-col justify-center items-center">
@@ -99,7 +115,7 @@ function Home() {
 
                   <div className="flex flex-row gap-2 justify-end w-full">
                     <span className='badge skeleton text-gray-100 w-16'></span>
-                  </div>é
+                  </div>
                 </div>
               </div>
             </div>
@@ -110,7 +126,7 @@ function Home() {
           <section className='flex flex-col justify-center h-fit bg-pokered glass card rounded-3xl shadow-lg text-white p-8 gap-5 grow min-w-[300px] sm:max-w-[400px]'>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pokémon_logo.svg/1200px-International_Pokémon_logo.svg.png" alt="" />
             <div className="flex flex-row items-center justify-between p-4 pb-0 pr-0 gap-4">
-              <h3 className="font-bold text-4xl"> filter by:</h3>
+              <h3 className="font-bold text-2xl sm:text-4xl"> Filter by:</h3>
               <button
                 className='btn bg-pokedarkred/50 text-white border-0 shadow-md shadow-red-900 rounded-full'
                 onClick={clearFilters}
@@ -120,7 +136,7 @@ function Home() {
             </div>
 
             <div className="card bg-pokedarkred/30 rounded-2xl flex flex-col gap-1 text-gray-800 p-6">
-            {/* name search input */}
+              {/* name search input */}
               <label className="input w-full">
                 <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></g></svg>
                 <input
@@ -156,6 +172,14 @@ function Home() {
         </div>
 
       </div>
+      {/* back to top button */}
+        <button
+          className={"btn border-0 text-sm fixed bottom-8 left-1/2 transform -translate-x-1/2 py-4 sm:py-2 px-4 z-50 bg-pokeyellow text-gray-800 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-300 " + (showScrollButton ? "" : "opacity-0 z-[-1]")}
+          onClick={scrollToTop}
+        >
+          ↑ back to top
+        </button>
+
       <footer className="footer footer-horizontal footer-center bg-pokedarkred text-primary-content p-10 glass">
         <aside className="text-center">
           <p className="font-bold">
@@ -180,6 +204,7 @@ function Home() {
             </a>
           </div>
         </nav>
+
       </footer>
     </>
   );
