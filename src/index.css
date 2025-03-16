@@ -4,7 +4,7 @@
 
 /* prevent dark mode */
 @plugin "daisyui"{
-  themes: false; 
+  themes: ['light']; 
 }
 @theme {
   --color-pokered: #D92949;

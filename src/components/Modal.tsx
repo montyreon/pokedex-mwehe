@@ -3,6 +3,7 @@ import axios from "axios";
 import { Pokemon } from "../model/types";
 import { typeColors } from "../common/typeColors";
 import { getWeakness } from "../common/weakness";
+import { Weight, Ruler } from "lucide-react";
 
 export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
     const [pokemonDescription, setPokemonDescription] = useState<string>("");
@@ -51,7 +52,7 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
         const traverseChain = (node: any) => {
             if (!node) return;
             const speciesURL = node.species.url;
-             // extract id from url, slice the last 2 elements, and convert to number
+            // extract id from url, slice the last 2 elements, and convert to number
             const id = parseInt(speciesURL.split("/").slice(-2, -1)[0]);
             evolutionStages.push({ name: node.species.name, id });
 
@@ -74,121 +75,131 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
     return (
         <dialog id="mowdal" className="modal w-auto">
 
-                <div className="modal-box max-w-[1080px] rounded-4xl p-8 sm:p-10 bg-pokered glass max-h-[90vh] overflow-y-auto shadow-xl">
-                    <div className="flex flex-row justify-end pb-4 sticky top-0 z-50 sm:hidden">
-                        <button
-                            onClick={() => (document.getElementById('mowdal') as HTMLDialogElement).close()}
-                            className="rounded-full btn outline-0 shadow-black/40 shadow-md outline-transparent">X</button>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-8">
-                        {/* POKEMON CARD PREVIEW */}
-                        <section className="flex flex-col items-center gap-6 h-fit">
-                            <figure className="bg-yellow-50 border-8 border-pokeyellow rounded-3xl px-2 basis-1/3 w-full">
-                                <img
-                                    src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
-                                    className="drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl"
-                                />
-                            </figure>
-                            {/* height & weight */}
-                            <div className="stats bg-pokedarkred text-white shadow">
-                                <div className="stat">
-                                    <div className="stat-title text-white">Height</div>
-                                    <div className="stat-value text-2xl"> {pokemonDetails?.height ? pokemonDetails.height / 10 : "n/a"} m</div>
-                                </div>
-                                <div className="stat">
-                                    <div className="stat-title text-white">Weight</div>
-                                    <div className="stat-value text-2xl"> {pokemonDetails?.weight ? pokemonDetails.weight / 10 : "n/a"} kg</div>
-                                </div>
-                            </div>
-                            {/* LEFT RIGHT NAVIGATION */}
-                            <div className="flex flex-row gap-4 justify-center items-center">
-                                <button onClick={() => changePokemon(previewedPokemon - 1)} className="btn bg-gray-800 text-white border-0">◀</button>
-                                <div className="bg-gray-50 rounded-2xl drop-shadow-lg">
-                                    <img className="drop-shadow-md min-h-24 min-w-24" src={pokemonDetails?.sprites.front_default} alt={"sprite of " + pokemonDetails?.name} />
-                                </div>
-                                <button onClick={() => changePokemon(previewedPokemon + 1)} className="btn bg-gray-800 text-white border-0">▶</button>
-                            </div>
-                            <div className="flex flex-row grow justify-center items-end w-full gap-2">
-                                <div className="text-white text-sm text-center hidden sm:block">
-                                    Click anywhere outside or press <kbd className="kbd text-black">esc</kbd> to exit.
+            <div className="modal-box max-w-[1080px] rounded-4xl p-8 px-4 pt-0 sm:p-10 bg-pokered glass max-h-[90vh] overflow-y-auto shadow-xl">
+                {/* close button */}
+                <div className="flex flex-row justify-end sticky top-10 z-50 sm:hidden">
+                    <button
+                        onClick={() => (document.getElementById('mowdal') as HTMLDialogElement).close()}
+                        className="rounded-full btn outline-0 shadow-black/40 shadow-md outline-transparent">X</button>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-8">
+                    {/* POKEMON CARD PREVIEW */}
+                    <section className="flex flex-col items-center gap-6 h-fit">
+                        <figure className="bg-yellow-50 border-8 border-pokeyellow rounded-3xl px-2 basis-1/3 w-full">
+                            <img
+                                src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
+                                className="drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl"
+                            />
+                        </figure>
+                        {/* height & weight */}
+                        <div className="stats bg-pokedarkred text-white shadow">
+                            <div className="stat">
+                                <div className="stat-title text-white">Height</div>
+                                <div className="stat-value text-xl sm:text-2xl"> {pokemonDetails?.height ? pokemonDetails.height / 10 : "n/a"} m</div>
+                                <div className="stat-figure">
+                                    <Weight size={30} />
                                 </div>
                             </div>
-                        </section>
-
-                        {/* POKEMON DETAILS */}
-                        <section className="flex flex-col card shadow-sm rounded-4xl bg-pokedarkred/50 p-4 text-white gap-4 basis-2/3">
-                            <div className="flex card bg-pokedarkred p-4 px-6 rounded-3xl">
-
-                                {/* pokemon name & id */}
-                                <div className="flex flex-row justify-between flex-wrap w-full">
-                                    <h3 className="font-bold text-4xl line-clamp-1"> {pokemonDetails?.name.toUpperCase()}</h3>
-                                    <div className="flex flex-col justify-start">
-                                        <p className="text-lg">#{previewedPokemon}</p>
-                                    </div>
+                            <div className="stat">
+                                <div className="stat-title text-white">Weight</div>
+                                <div className="stat-value  text-xl sm:text-2xl"> {pokemonDetails?.weight ? pokemonDetails.weight / 10 : "n/a"} kg</div>
+                                <div className="stat-figure">
+                                    <Ruler size={30} />
                                 </div>
+                            </div>
+                        </div>
+                        {/* LEFT RIGHT NAVIGATION */}
+                        <div className="flex flex-row gap-4 justify-center items-center">
+                            <button onClick={() => changePokemon(previewedPokemon - 1)} className="btn bg-gray-800 text-white border-0">◀</button>
+                            <div className="bg-gray-50 rounded-2xl drop-shadow-lg">
+                                <img className="drop-shadow-md min-h-24 min-w-24" src={pokemonDetails?.sprites.front_default} alt={"sprite of " + pokemonDetails?.name} />
+                            </div>
+                            <button onClick={() => changePokemon(previewedPokemon + 1)} className="btn bg-gray-800 text-white border-0">▶</button>
+                        </div>
+                        <div className="flex flex-row grow justify-center items-end w-full gap-2">
+                            <div className="text-white text-sm text-center hidden sm:block">
+                                Click anywhere outside or press <kbd className="kbd text-black"
+                                    onClick={() => (document.getElementById('mowdal') as HTMLDialogElement).close()}
+                                >esc</kbd> to exit.
+                            </div>
+                        </div>
+                    </section>
 
-                                <div className="flex flex-row justify-between gap-3 items-center mt-1">
+                    {/* POKEMON DETAILS */}
+                    <section className="flex flex-col card shadow-sm rounded-4xl bg-pokedarkred/50 p-2 text-white gap-4 basis-2/3">
+                        <div className="flex card bg-pokedarkred p-4 py-6 rounded-3xl">
 
-                                    {/* pokemon category */}
-                                    <p className="text-pokeyellow text-xl italic">{pokemonCategory}</p>
-                                    {/* pokemon types */}
-
-                                    <div className="flex items-start gap-2 flex-wrap">
-                                        {pokemonDetails?.types.map((type, index) => (
-                                            <span key={index} className="text-white rounded-full px-3 py-1 text-md font-semibold"
-                                                style={{ backgroundColor: typeColors[type.type.name] }}>
-                                                {type.type.name}
-                                            </span>
-                                        ))}
-                                    </div>
+                            {/* pokemon name & id */}
+                            <div className="flex flex-row justify-between flex-wrap w-full">
+                                <h3 className="font-bold  text-4xl line-clamp-1"> {pokemonDetails?.name.toUpperCase()}</h3>
+                                <div className="flex flex-col justify-start">
+                                    <p className="text-lg text-end">#{previewedPokemon}</p>
                                 </div>
-
-                                {/* pokemon description */}
-                                <p className="pt-2">{pokemonDescription}</p>
                             </div>
 
-                            {/* weaknesses */}
-                            <div className="card p-4 bg-pokedarkred rounded-3xl flex flex-col gap-1 px-6">
-                                <h4 className="font-bold text-lg">Weaknesses</h4>
-                                <div className="flex flex-row flex-wrap gap-2 px-2">
-                                    {/* convert the Types[] to array first; also rearrange alphabetically */}
-                                    {pokemonDetails?.types && getWeakness(pokemonDetails.types.map((t) => t.type.name)).sort().map((weakness) => (
+                            <div className="flex flex-row justify-between gap-3 items-center mt-1 px-2">
 
-                                        <span className="text-white rounded-full px-3 py-1 text-sm font-semibold"
-                                            style={{ backgroundColor: typeColors[weakness] }}>{weakness}</span>
+                                {/* pokemon category */}
+                                <p className="text-pokeyellow text-xl italic">{pokemonCategory}</p>
+                                {/* pokemon types */}
+
+                                <div className="flex justify-end sm:justify-start items-start gap-2 flex-wrap">
+                                    {pokemonDetails?.types.map((type, index) => (
+                                        <span key={index} className="text-white rounded-full px-3 py-1 text-md font-semibold"
+                                            style={{ backgroundColor: typeColors[type.type.name] }}>
+                                            {type.type.name}
+                                        </span>
                                     ))}
                                 </div>
                             </div>
 
-                            {/* stats */}
-                            <div className="w-full card card-body text-white bg-pokedarkred rounded-3xl gap-0 pt-4">
-                                <h4 className="font-bold text-lg">Base Stats</h4>
-                                <ul className="list-none">
-                                    {pokemonDetails?.stats.map((stat, index) => {
-                                        const normalizedValue = (stat.base_stat / 255) * 100; // normalize stat before graphing
-                                        return (
-                                            <li key={index} className="flex flex-col gap-1">
-                                                <div className="flex justify-between">
-                                                    <span className="capitalize">{stat.stat.name.replace("-", " ")}:</span>
-                                                    <span className="font-bold">{stat.base_stat}</span>
-                                                </div>
-                                                <progress className="progress progress-accent" value={normalizedValue} max="100"></progress>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                            </div>
+                            {/* pokemon description */}
+                            <p className="pt-2">{pokemonDescription}</p>
+                        </div>
 
-                            {/* evolution chain with images */}
-                            <div className="card card-body pt-2 gap-1">
-                                <h4 className="font-bold text-lg text-center">Evolution Chain</h4>
-                                {evolutionChain.length > 0 ? (
-                                    <div className="flex flex-row justify-center items-center mt-2">
-                                        {evolutionChain.map((evolution, index) => (
+                        {/* weaknesses */}
+                        <div className="card p-4 bg-pokedarkred rounded-3xl flex flex-col gap-1 px-6">
+                            <h4 className="font-bold text-lg">Weaknesses</h4>
+                            <div className="flex flex-row flex-wrap gap-2 px-2">
+                                {/* convert the Types[] to array first; also rearrange alphabetically */}
+                                {pokemonDetails?.types && getWeakness(pokemonDetails.types.map((t) => t.type.name)).sort().map((weakness) => (
+
+                                    <span className="text-white rounded-full px-3 py-1 text-sm font-semibold"
+                                        style={{ backgroundColor: typeColors[weakness] }}>{weakness}</span>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* stats */}
+                        <div className="w-full card card-body text-white bg-pokedarkred rounded-3xl gap-0 pt-4">
+                            <h4 className="font-bold text-lg">Base Stats</h4>
+                            <ul className="list-none">
+                                {pokemonDetails?.stats.map((stat, index) => {
+                                    const normalizedValue = (stat.base_stat / 255) * 100; // normalize stat before graphing
+                                    return (
+                                        <li key={index} className="flex flex-col gap-1">
+                                            <div className="flex justify-between">
+                                                <span className="capitalize">{stat.stat.name.replace("-", " ")}:</span>
+                                                <span className="font-bold">{stat.base_stat}</span>
+                                            </div>
+                                            <progress className="progress progress-accent" value={normalizedValue} max="100"></progress>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </div>
+
+                        {/* evolution chain with images */}
+                        <div className="card card-body pt-2 gap-1">
+                            <h4 className="font-bold text-lg text-center">Evolution Chain</h4>
+                            {evolutionChain.length > 0 ? (
+                                <div className="flex flex-col sm:flex-row justify-center items-center mt-2">
+                                    {evolutionChain.map((evolution, index) => (
+                                        <>
                                             <div key={index} className="flex flex-row items-center justify-center">
                                                 {/* evolution image */}
                                                 <div className="flex flex-col">
-                                                    <div className={"rounded-full p-3 glass drop-shadow-md" + (pokemonDetails?.name === evolution.name ? " bg-pokeyellow" : " bg-pokeblue")}>
+                                                    <div className={"rounded-full p-3 drop-shadow-md" + (pokemonDetails?.name === evolution.name ? " bg-pokeyellow" : " bg-pokeblue")}>
                                                         <img
                                                             src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${String(evolution.id).padStart(3, "0")}.png`}
                                                             alt={evolution.name}
@@ -199,20 +210,21 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                                                     <p className={"capitalize text-sm text-center mt-1 " + (pokemonDetails?.name === evolution.name ? " font-bold drop-shadow-sm" : " ")}>{evolution.name}</p>
                                                 </div>
                                                 {/* arrow if theres a next evolution */}
-                                                {index < evolutionChain.length - 1 && <span className="text-xl px-2">→</span>}
+                                                {index < evolutionChain.length - 1 && <span className="text-xl px-2 hidden sm:block">→</span>}
                                             </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <p className="mt-2">no evolution data</p>
-                                )}
-                            </div>
-                        </section>
-                    </div>
+                                            {index < evolutionChain.length - 1 && <span className="text-xl px-2 sm:hidden">↓</span>}</>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="mt-2">no evolution data</p>
+                            )}
+                        </div>
+                    </section>
                 </div>
-                <form method="dialog" className="modal-backdrop">
-                    <button>close</button>
-                </form>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+                <button>close</button>
+            </form>
 
         </dialog>
     );

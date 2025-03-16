@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Modal } from './components/Modal';
 import { Pokemon } from './model/types';
 import pokeball from './assets/pokeball.png';
+import { Search, StickyNote } from 'lucide-react';
 
 function Home() {
 
@@ -138,7 +139,7 @@ function Home() {
             <div className="card bg-pokedarkred/30 rounded-2xl flex flex-col gap-1 text-gray-800 p-6">
               {/* name search input */}
               <label className="input w-full">
-                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></g></svg>
+              <Search className='text-gray-400' strokeWidth={1.75} />
                 <input
                   type="search"
                   className="grow"
@@ -149,7 +150,7 @@ function Home() {
               </label>
               {/* pokemon id search input */}
               <label className="input w-full">
-                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path></g></svg>
+              <StickyNote className='text-gray-400' strokeWidth={1.75} />
                 <input
                   type="number"
                   className="grow"
@@ -178,7 +179,7 @@ function Home() {
       </div>
       {/* back to top button */}
         <button
-          className={"btn border-0 text-sm fixed bottom-8 left-1/2 transform -translate-x-1/2 py-4 sm:py-2 px-4 z-50 bg-pokeyellow text-gray-800 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-300 " + (showScrollButton ? "" : "opacity-0 z-[-1]")}
+          className={"btn border-0 text-base fixed bottom-8 left-1/2 transform -translate-x-1/2 py-4 sm:py-2 px-4 z-50 bg-pokeyellow text-gray-800 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-300 " + (showScrollButton ? "" : "opacity-0 z-[-1]")}
           onClick={scrollToTop}
         >
           ↑ back to top
