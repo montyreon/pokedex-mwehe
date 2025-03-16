@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal } from './components/Modal';
 import { Pokemon } from './model/types';
+import pokeball from './assets/pokeball.png';
 
 function Home() {
   const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]); // stores the full pokémon catalog
@@ -58,19 +59,29 @@ function Home() {
 
   return (
     <>
-      <div className='p-12'>
-        <div className='flex flex-col-reverse sm:flex-row-reverse justify-center gap-8 sm:gap-0'>
+      <div className="navbar shadow-sm sticky top-0 z-50 backdrop-blur-2xl glass px-12">
+          <img src={pokeball} alt="pokeball" className='h-10'/>
+        <div className="flex-1">
+          <a className="text-xl tex-white font-bold">Pokédex</a>
+        </div>
+        <div className="flex-none">
+
+
+        </div>
+      </div>
+      <div className='p-8 sm:p-12'>
+        <div className='flex flex-col-reverse sm:flex-row-reverse justify-center gap-8'>
           <Modal selectedPokemon={selectedPokemon} />
 
           {/* CARDS SECTION */}
-          <section className='flex flex-wrap justify-center gap-6 flex-[2]'>
-            {filteredPokemon.slice(0, 10).map(pokemon => (
+          <section className='flex flex-wrap justify-start gap-6 flex-[2]'>
+            {filteredPokemon.slice(0, 100).map(pokemon => (
               <Card key={pokemon.id} id={pokemon.id} setSelectedID={setSelectedPokemon} />
             ))}
           </section>
 
           {/* FILTER CONTROLS */}
-          <section className='flex flex-col justify-center h-fit bg-pokered glass card rounded-3xl shadow-lg text-white p-8 gap-5 grow min-w-[300px] max-w-[400px]'>
+          <section className='flex flex-col justify-center h-fit bg-pokered glass card rounded-3xl shadow-lg text-white p-8 gap-5 grow min-w-[300px] sm:max-w-[400px]'>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pokémon_logo.svg/1200px-International_Pokémon_logo.svg.png" alt="" />
             <div className="flex flex-row items-center justify-between p-4 pb-0 pr-0 gap-4">
               <h3 className="font-bold text-4xl"> filter by:</h3>
@@ -117,7 +128,7 @@ function Home() {
         </div>
 
       </div>
-      <footer className="footer footer-horizontal footer-center bg-pokedarkred text-primary-content p-10">
+      <footer className="footer footer-horizontal footer-center bg-pokedarkred text-primary-content p-10 glass">
         <aside className="text-center">
           <p className="font-bold">
             Old St. Labs Internship Technical Assessment
