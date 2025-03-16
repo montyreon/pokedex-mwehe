@@ -36,7 +36,7 @@ function Card({ id, setSelectedID }: { id: number; setSelectedID: React.Dispatch
     return (
         <div className="card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-0"
             onClick={() => {
-                (document.getElementById('my_modal_2') as HTMLDialogElement).showModal();
+                (document.getElementById('mowdal') as HTMLDialogElement).showModal();
                 setSelectedID(id);
             }}>
             <div className={"relative " + (isImageLoading ? "hidden" : "block")}>

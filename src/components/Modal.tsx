@@ -47,10 +47,12 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
     const extractEvolutionChain = (chain: any): { name: string; id: number }[] => {
         let evolutionStages: { name: string; id: number }[] = [];
 
+        // recursive function to iterate thru the evolution chain
         const traverseChain = (node: any) => {
             if (!node) return;
             const speciesURL = node.species.url;
-            const id = parseInt(speciesURL.split("/").slice(-2, -1)[0]); // extract id from url
+             // extract id from url, slice the last 2 elements, and convert to number
+            const id = parseInt(speciesURL.split("/").slice(-2, -1)[0]);
             evolutionStages.push({ name: node.species.name, id });
 
             node.evolves_to.forEach(traverseChain); // handle multiple evolutions
@@ -70,16 +72,16 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
     };
 
     return (
-        <dialog id="my_modal_2" className="modal w-auto">
+        <dialog id="mowdal" className="modal w-auto">
 
                 <div className="modal-box max-w-[1080px] rounded-4xl p-8 sm:p-10 bg-pokered glass max-h-[90vh] overflow-y-auto shadow-xl">
                     <div className="flex flex-row justify-end pb-4 sticky top-0 z-50 sm:hidden">
                         <button
-                            onClick={() => (document.getElementById('my_modal_2') as HTMLDialogElement).close()}
+                            onClick={() => (document.getElementById('mowdal') as HTMLDialogElement).close()}
                             className="rounded-full btn outline-0 shadow-black/40 shadow-md outline-transparent">X</button>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-8">
-                        {/* POKEMON CARD */}
+                        {/* POKEMON CARD PREVIEW */}
                         <section className="flex flex-col items-center gap-6 h-fit">
                             <figure className="bg-yellow-50 border-8 border-pokeyellow rounded-3xl px-2 basis-1/3 w-full">
                                 <img
@@ -145,8 +147,6 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                                 <p className="pt-2">{pokemonDescription}</p>
                             </div>
 
-
-
                             {/* weaknesses */}
                             <div className="card p-4 bg-pokedarkred rounded-3xl flex flex-col gap-1 px-6">
                                 <h4 className="font-bold text-lg">Weaknesses</h4>
@@ -160,9 +160,7 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                                 </div>
                             </div>
 
-
-
-                            {/* Stats */}
+                            {/* stats */}
                             <div className="w-full card card-body text-white bg-pokedarkred rounded-3xl gap-0 pt-4">
                                 <h4 className="font-bold text-lg">Base Stats</h4>
                                 <ul className="list-none">
@@ -191,7 +189,6 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                                                 {/* evolution image */}
                                                 <div className="flex flex-col">
                                                     <div className={"rounded-full p-3 glass drop-shadow-md" + (pokemonDetails?.name === evolution.name ? " bg-pokeyellow" : " bg-pokeblue")}>
-
                                                         <img
                                                             src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${String(evolution.id).padStart(3, "0")}.png`}
                                                             alt={evolution.name}
@@ -201,7 +198,7 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                                                     {/* evolution name */}
                                                     <p className={"capitalize text-sm text-center mt-1 " + (pokemonDetails?.name === evolution.name ? " font-bold drop-shadow-sm" : " ")}>{evolution.name}</p>
                                                 </div>
-                                                {/* arrow if there's a next evolution */}
+                                                {/* arrow if theres a next evolution */}
                                                 {index < evolutionChain.length - 1 && <span className="text-xl px-2">→</span>}
                                             </div>
                                         ))}
