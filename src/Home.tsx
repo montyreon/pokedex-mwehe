@@ -1,5 +1,5 @@
 import Card from './components/Card';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import axios from 'axios';
 import { Modal } from './components/Modal';
 import { Pokemon } from './model/types';
@@ -40,6 +40,7 @@ function Home() {
   const [tempSearchId, setTempSearchId] = useState<string>('');
   const [previewCount, setPreviewCount] = useState<number>(10);
   const [sortOption, setSortOption] = useState<string>('id-asc');
+  const [displayLimit, setdisplayLimit] = useState<number>(25);
 
   // applied filter values
   const [searchName, setSearchName] = useState<string>('');
@@ -86,12 +87,17 @@ function Home() {
     setSearchName('');
     setSearchId('');
     setSortOption('id-asc');
+    setdisplayLimit(25);
   };
 
   useEffect(() => {
     applyFilters();
   }, [searchName, searchId, sortOption]);
 
+  useEffect(() => {
+    const limit = displayLimit === 1025 ? allPokemon.length : displayLimit;
+    setFilteredPokemon(allPokemon.slice(0, limit));
+  }, [displayLimit, allPokemon]);
 
   // SCROLL TO TOP BUTTON MECHANISM ========================================
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -203,27 +209,47 @@ function Home() {
                   onChange={(e) => setTempSearchId(e.target.value)}
                 />
               </label>
-              <div className="flex flex-row items-center justify-between w-full px-3 py-1 card bg-pokedarkred/50 rounded-xl">
+                <div className="flex flex-row items-center justify-between w-full px-3 py-1 mt-2 card bg-pokedarkred/50 rounded-xl">
                 <p className='text-white line-clamp-1 grow w-min'>Sort by: </p>
                 <div className="dropdown dropdown-end">
                   <div tabIndex={0} role="button" className="flex flex-row items-center justify-center m-1 font-normal text-white border-none shadow-sm btn grow min-w-2/5 max-w-32 bg-pokeblue shadow-gray-600 ">
-                    <p className='line-clamp-1'>
-                      {sortOption === 'name-asc' ? '⬆️ Name' :
-                        sortOption === 'name-desc' ? '⬇️ Name' :
-                          sortOption === 'id-asc' ? '⬆️ ID' :
-                            sortOption === 'id-desc' ? '⬇️ ID'
-                            : '↕️ Sort'}
-                    </p>
-                    {/* dropdown for sort options */}
+                  <p className='line-clamp-1'>
+                    {sortOption === 'name-asc' ? '⬆️ Name' :
+                    sortOption === 'name-desc' ? '⬇️ Name' :
+                      sortOption === 'id-asc' ? '⬆️ ID' :
+                      sortOption === 'id-desc' ? '⬇️ ID'
+                      : '↕️ Sort'}
+                  </p>
+                  {/* dropdown for sort options */}
                   </div>
                   <ul tabIndex={0} className="p-2 shadow-sm dropdown-content menu bg-base-100 rounded-box z-1 w-52">
-                    <li><a className={sortOption === 'name-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ Name</a></li>
-                    <li><a className={sortOption === 'name-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Name</a></li>
-                    <li><a className={sortOption === 'id-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ ID</a></li>
-                    <li><a className={sortOption === 'id-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ ID</a></li>
+                  <li><a className={sortOption === 'name-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ Name</a></li>
+                  <li><a className={sortOption === 'name-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Name</a></li>
+                  <li><a className={sortOption === 'id-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ ID</a></li>
+                  <li><a className={sortOption === 'id-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ ID</a></li>
                   </ul>
                 </div>
-              </div>
+                </div>
+
+                <div className="flex flex-row items-center justify-between w-full px-3 py-1 card bg-pokedarkred/50 rounded-xl">
+                <p className='text-white line-clamp-1 grow w-min'>Display count: </p>
+                <div className="dropdown dropdown-end">
+                  <div tabIndex={0} role="button" className="flex flex-row items-center justify-center m-1 font-normal text-white border-none shadow-sm btn grow min-w-2/5 max-w-32 bg-pokeblue shadow-gray-600 ">
+                  <p className='line-clamp-1'>
+                    {displayLimit}
+                  </p>
+                  {/* dropdown for display count options */}
+                  </div>
+                  <ul tabIndex={0} className="p-2 shadow-sm dropdown-content menu bg-base-100 rounded-box z-1 w-52">
+                  <li><a className={displayLimit === 10 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(10); (document.activeElement as HTMLElement)?.blur(); }}>10</a></li>
+                  <li><a className={displayLimit === 25 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(25); (document.activeElement as HTMLElement)?.blur(); }}>25</a></li>
+                  <li><a className={displayLimit === 50 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(50); (document.activeElement as HTMLElement)?.blur(); }}>50</a></li>
+                  <li><a className={displayLimit === 100 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(100); (document.activeElement as HTMLElement)?.blur(); }}>100</a></li>
+                  <li><a className={displayLimit === 200 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(200); (document.activeElement as HTMLElement)?.blur(); }}>200</a></li>
+                  <li><a className={displayLimit === allPokemon.length ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(allPokemon.length); (document.activeElement as HTMLElement)?.blur(); }}>All</a></li>
+                  </ul>
+                </div>
+                </div>
             </div>
 
 
@@ -235,7 +261,7 @@ function Home() {
                 onClick={() => {
                   applyFilters();
                   // also disable the "click to load more" card
-                  setPreviewCount(100);
+                  setPreviewCount(displayLimit);
                 }}>
                 apply
               </button>
