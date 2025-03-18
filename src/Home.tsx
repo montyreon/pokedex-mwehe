@@ -66,7 +66,15 @@ function Home() {
       default:
         break;
     }
-    setAllPokemon(sorted);
+
+    // apply search filters immediately
+    const filtered = sorted.filter(pokemon =>
+      (tempSearchName === '' || pokemon.name.toLowerCase().includes(tempSearchName.toLowerCase())) &&
+      (tempSearchId === '' || pokemon.id.toString().includes(tempSearchId))
+    );
+
+    // update state with filtered results
+    setFilteredPokemon(filtered);
     setSearchName(tempSearchName);
     setSearchId(tempSearchId);
   };
@@ -209,47 +217,47 @@ function Home() {
                   onChange={(e) => setTempSearchId(e.target.value)}
                 />
               </label>
-                <div className="flex flex-row items-center justify-between w-full px-3 py-1 mt-2 card bg-pokedarkred/50 rounded-xl">
+              <div className="flex flex-row items-center justify-between w-full px-3 py-1 mt-2 card bg-pokedarkred/50 rounded-xl">
                 <p className='text-white line-clamp-1 grow w-min'>Sort by: </p>
                 <div className="dropdown dropdown-end">
                   <div tabIndex={0} role="button" className="flex flex-row items-center justify-center m-1 font-normal text-white border-none shadow-sm btn grow min-w-2/5 max-w-32 bg-pokeblue shadow-gray-600 ">
-                  <p className='line-clamp-1'>
-                    {sortOption === 'name-asc' ? '⬆️ Name' :
-                    sortOption === 'name-desc' ? '⬇️ Name' :
-                      sortOption === 'id-asc' ? '⬆️ ID' :
-                      sortOption === 'id-desc' ? '⬇️ ID'
-                      : '↕️ Sort'}
-                  </p>
-                  {/* dropdown for sort options */}
+                    <p className='line-clamp-1'>
+                      {sortOption === 'name-asc' ? '⬆️ Name' :
+                        sortOption === 'name-desc' ? '⬇️ Name' :
+                          sortOption === 'id-asc' ? '⬆️ ID' :
+                            sortOption === 'id-desc' ? '⬇️ ID'
+                              : '↕️ Sort'}
+                    </p>
+                    {/* dropdown for sort options */}
                   </div>
                   <ul tabIndex={0} className="p-2 shadow-sm dropdown-content menu bg-base-100 rounded-box z-1 w-52">
-                  <li><a className={sortOption === 'name-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ Name</a></li>
-                  <li><a className={sortOption === 'name-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Name</a></li>
-                  <li><a className={sortOption === 'id-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ ID</a></li>
-                  <li><a className={sortOption === 'id-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ ID</a></li>
+                    <li><a className={sortOption === 'name-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ Name</a></li>
+                    <li><a className={sortOption === 'name-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Name</a></li>
+                    <li><a className={sortOption === 'id-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ ID</a></li>
+                    <li><a className={sortOption === 'id-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ ID</a></li>
                   </ul>
                 </div>
-                </div>
+              </div>
 
-                <div className="flex flex-row items-center justify-between w-full px-3 py-1 card bg-pokedarkred/50 rounded-xl">
+              <div className="flex flex-row items-center justify-between w-full px-3 py-1 card bg-pokedarkred/50 rounded-xl">
                 <p className='text-white line-clamp-1 grow w-min'>Display count: </p>
                 <div className="dropdown dropdown-end">
                   <div tabIndex={0} role="button" className="flex flex-row items-center justify-center m-1 font-normal text-white border-none shadow-sm btn grow min-w-2/5 max-w-32 bg-pokeblue shadow-gray-600 ">
-                  <p className='line-clamp-1'>
-                    {displayLimit}
-                  </p>
-                  {/* dropdown for display count options */}
+                    <p className='line-clamp-1'>
+                      {displayLimit}
+                    </p>
+                    {/* dropdown for display count options */}
                   </div>
                   <ul tabIndex={0} className="p-2 shadow-sm dropdown-content menu bg-base-100 rounded-box z-1 w-52">
-                  <li><a className={displayLimit === 10 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(10); (document.activeElement as HTMLElement)?.blur(); }}>10</a></li>
-                  <li><a className={displayLimit === 25 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(25); (document.activeElement as HTMLElement)?.blur(); }}>25</a></li>
-                  <li><a className={displayLimit === 50 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(50); (document.activeElement as HTMLElement)?.blur(); }}>50</a></li>
-                  <li><a className={displayLimit === 100 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(100); (document.activeElement as HTMLElement)?.blur(); }}>100</a></li>
-                  <li><a className={displayLimit === 200 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(200); (document.activeElement as HTMLElement)?.blur(); }}>200</a></li>
-                  <li><a className={displayLimit === allPokemon.length ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(allPokemon.length); (document.activeElement as HTMLElement)?.blur(); }}>All</a></li>
+                    <li><a className={displayLimit === 10 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(10); (document.activeElement as HTMLElement)?.blur(); }}>10</a></li>
+                    <li><a className={displayLimit === 25 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(25); (document.activeElement as HTMLElement)?.blur(); }}>25</a></li>
+                    <li><a className={displayLimit === 50 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(50); (document.activeElement as HTMLElement)?.blur(); }}>50</a></li>
+                    <li><a className={displayLimit === 100 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(100); (document.activeElement as HTMLElement)?.blur(); }}>100</a></li>
+                    <li><a className={displayLimit === 200 ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(200); (document.activeElement as HTMLElement)?.blur(); }}>200</a></li>
+                    <li><a className={displayLimit === allPokemon.length ? 'bg-gray-200' : ''} onClick={() => { setdisplayLimit(allPokemon.length); (document.activeElement as HTMLElement)?.blur(); }}>All</a></li>
                   </ul>
                 </div>
-                </div>
+              </div>
             </div>
 
 
