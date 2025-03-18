@@ -103,6 +103,8 @@ function Home() {
       setShowScrollButton(window.scrollY > 100);
       // hide button again when at the very bottom
       setShowScrollButton(window.scrollY < document.body.scrollHeight - window.innerHeight - 100); // 100px from bottom
+      // hide button when at the top
+      if (window.scrollY === 0) setShowScrollButton(false);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -116,14 +118,14 @@ function Home() {
   return (
     <>
       {/* NAVIGATION BAR */}
-      <nav className="navbar sticky top-0 z-50 backdrop-blur-2xl glass px-12 shadow-lg">
+      <nav className="sticky top-0 z-50 px-12 shadow-lg navbar backdrop-blur-2xl glass">
         <img src={pokeball} alt="pokeball" className='h-10' />
         <div className="flex-1">
           <a className="text-xl font-bold">Pokédex</a>
         </div>
       </nav>
       <div className='p-8 sm:p-12'>
-        <div className='flex flex-col-reverse md:flex-row-reverse justify-center items-center md:items-start gap-8'>
+        <div className='flex flex-col-reverse items-center justify-center gap-8 md:flex-row-reverse md:items-start'>
           {/* MODAL FOR DETAILED PREVIEW */}
           <Modal selectedPokemon={selectedPokemon} />
 
@@ -147,17 +149,17 @@ function Home() {
               onClick={() => { setPreviewCount(100) }}
             >
               <figure>
-                <div className="skeleton w-28 h-64 rounded-3xl bg-gray-100 text-gray-500 grow flex flex-col justify-center items-center">
+                <div className="flex flex-col items-center justify-center h-64 text-gray-500 bg-gray-100 skeleton w-28 rounded-3xl grow">
                   Click to load more...
                 </div>
               </figure>
-              <div className="card-body p-4 pb-0 z-10">
+              <div className="z-10 p-4 pb-0 card-body">
                 <h3 className="text-gray-200">#----</h3>
-                <div className="flex flex-row justify-between gap-4 flex-wrap">
-                  <h2 className="card-title skeleton bg-gray-100 w-24 min-h-6 rounded-full"></h2>
+                <div className="flex flex-row flex-wrap justify-between gap-4">
+                  <h2 className="w-24 bg-gray-100 rounded-full card-title skeleton min-h-6"></h2>
 
-                  <div className="flex flex-row gap-2 justify-end w-full">
-                    <span className='badge skeleton text-gray-100 w-16'></span>
+                  <div className="flex flex-row justify-end w-full gap-2">
+                    <span className='w-16 text-gray-100 badge skeleton'></span>
                   </div>
                 </div>
               </div>
@@ -166,21 +168,21 @@ function Home() {
           </section>
 
           {/* FILTER CONTROLS CARD */}
-          <section className='flex flex-col justify-center h-fit bg-pokered glass card rounded-3xl shadow-lg text-white p-8 gap-5 grow min-w-[300px] sm:max-w-[400px]'>
+          <section className='flex flex-col justify-center h-fit bg-pokered glass card rounded-3xl shadow-lg text-white p-4 sm:p-8 gap-5 grow min-w-[300px] sm:max-w-[400px]'>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pokémon_logo.svg/1200px-International_Pokémon_logo.svg.png" alt="" />
-            <div className="flex flex-row items-center justify-between p-4 pb-0 pr-0 gap-4">
-              <h3 className="font-bold text-2xl sm:text-4xl"> Filter by:</h3>
+            <div className="flex flex-row items-center justify-between gap-4 p-4 pb-0 pr-0">
+              <h3 className="text-2xl font-bold sm:text-4xl"> Filter by:</h3>
               <button
-                className='btn bg-pokedarkred/50 text-white border-0 shadow-md shadow-red-900 rounded-full'
+                className='text-white border-0 rounded-full shadow-md btn bg-pokedarkred/50 shadow-red-900'
                 onClick={clearFilters}>
                 clear
               </button>
             </div>
 
             {/* FILTER INPUTS */}
-            <div className="card bg-pokedarkred/30 rounded-2xl flex flex-col gap-1 text-gray-800 p-6 gap-2">
+            <div className="flex flex-col gap-2 p-6 text-gray-800 card bg-pokedarkred/30 rounded-2xl">
               {/* name search input */}
-              <label className="input w-full">
+              <label className="w-full input">
                 <Search className='text-gray-400' strokeWidth={1.75} />
                 <input
                   type="search"
@@ -191,7 +193,7 @@ function Home() {
                 />
               </label>
               {/* pokemon id search input */}
-              <label className="input w-full">
+              <label className="w-full input">
                 <StickyNote className='text-gray-400' strokeWidth={1.75} />
                 <input
                   type="number"
@@ -201,10 +203,10 @@ function Home() {
                   onChange={(e) => setTempSearchId(e.target.value)}
                 />
               </label>
-              <div className="w-full card flex flex-row justify-between items-center bg-pokedarkred/50 px-3 py-1">
+              <div className="flex flex-row items-center justify-between w-full px-3 py-1 card bg-pokedarkred/50">
                 <p className='text-white line-clamp-1 grow w-min'>Sort by: </p>
                 <div className="dropdown dropdown-end">
-                  <div tabIndex={0} role="button" className="btn m-1 flex flex-row font-normal justify-center items-center grow min-w-2/5 max-w-32 bg-pokeblue shadow-sm shadow-gray-600 text-gray-900 border-none ">
+                  <div tabIndex={0} role="button" className="flex flex-row items-center justify-center m-1 font-normal text-gray-800 border-none shadow-sm btn grow min-w-2/5 max-w-32 bg-pokeblue shadow-gray-600 ">
                     <p className='line-clamp-1'>
                       {sortOption === 'name-asc' ? '⬆️ Name' :
                         sortOption === 'name-desc' ? '⬇️ Name' :
@@ -213,8 +215,9 @@ function Home() {
                               sortOption === 'type-asc' ? '⬆️ Type' :
                                 sortOption === 'type-desc' ? '⬇️ Type' : '⬆️ Name'}
                     </p>
+                    {/* dropdown for sort options */}
                   </div>
-                    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                    <ul tabIndex={0} className="p-2 shadow-sm dropdown-content menu bg-base-100 rounded-box z-1 w-52">
                     <li><a className={sortOption === 'name-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ Name</a></li>
                     <li><a className={sortOption === 'name-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Name</a></li>
                     <li><a className={sortOption === 'id-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ ID</a></li>
@@ -231,7 +234,7 @@ function Home() {
             {/* apply filters button */}
             <div className="flex justify-center w-full">
               <button
-                className='btn rounded-full bg-pokeyellow text-gray-800 border-0 shadow-md shadow-yellow-900 w-4/5'
+                className='w-4/5 text-gray-800 border-0 rounded-full shadow-md btn bg-pokeyellow shadow-yellow-900'
                 onClick={() => {
                   applyFilters();
                   // also disable the "click to load more" card
@@ -245,14 +248,24 @@ function Home() {
       </div>
 
       {/* BACK TO TOP BUTTON (STICKY AND FLOATING)*/}
-      <button
-        className={"btn border-0 text-base fixed bottom-8 left-1/2 transform -translate-x-1/2 py-4 sm:py-2 px-4 z-50 bg-pokeyellow text-gray-800 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-300 " + (showScrollButton ? "" : "opacity-0 z-[-1]")}
-        onClick={scrollToTop}
-      >
-        ↑ back to top
-      </button>
+      <div className="fixed left-0 right-0 z-50 flex justify-center pointer-events-none bottom-8">
+        <button
+          className={"pointer-events-auto btn border-0 text-base py-4 sm:py-2 px-4 bg-pokeyellow text-gray-800 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-300 transform " + (showScrollButton ? "" : "opacity-0 z-[-1]")}
+          onClick={() => {
+            scrollToTop();
+            // query the button to add a small animation
+            const button = document.querySelector('.pointer-events-auto');
+            if (button) {
+              button.classList.add('translate-x-5');
+              setTimeout(() => button.classList.remove('translate-x-5'), 300);
+            }
+          }}
+        >
+          ↑ back to top
+        </button>
+      </div>
 
-      <footer className="footer footer-horizontal footer-center bg-pokedarkred text-primary-content p-10 glass">
+      <footer className="p-10 footer footer-horizontal footer-center bg-pokedarkred text-primary-content glass">
         <aside className="text-center">
           <p className="font-bold">
             Old St. Labs Internship Technical Assessment
