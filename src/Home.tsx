@@ -9,6 +9,7 @@ import { Search, StickyNote } from 'lucide-react';
 function Home() {
 
   // POKEMON DATA FUNCTIONS  ========================================
+  const [initialFetch, setInitialFetch] = useState<boolean>(true);
   const [allPokemon, setAllPokemon] = useState<Pokemon[]>([]); // stores the full pokemon catalog
   const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]);
   const [selectedPokemon, setSelectedPokemon] = useState<number>(1);
@@ -24,6 +25,8 @@ function Home() {
       setAllPokemon(pokemonList);
       // initially display all pokemon
       setFilteredPokemon(pokemonList); 
+      // this is for displaying the appropriate skeleton cards for the initial load
+      setInitialFetch(false);
     };
 
     fetchAllPokemon();
@@ -33,13 +36,13 @@ function Home() {
   // FILTERING FUNCTIONS ========================================
 
   // input fields for user typing (not applied yet)
-  const [tempSearchName, setTempSearchName] = useState('');
-  const [tempSearchId, setTempSearchId] = useState('');
+  const [tempSearchName, setTempSearchName] = useState<string>('');
+  const [tempSearchId, setTempSearchId] = useState<string>('');
   const [previewCount, setPreviewCount] = useState<number>(10);
 
   // applied filter values
-  const [searchName, setSearchName] = useState('');
-  const [searchId, setSearchId] = useState('');
+  const [searchName, setSearchName] = useState<string>('');
+  const [searchId, setSearchId] = useState<string>('');
 
   // apply filters only when "apply" is clicked
   const applyFilters = () => {
@@ -86,17 +89,16 @@ function Home() {
 
   return (
     <>
-      <div className="navbar sticky top-0 z-50 backdrop-blur-2xl glass px-12 shadow-lg">
+      {/* NAVIGATION BAR */}
+      <nav className="navbar sticky top-0 z-50 backdrop-blur-2xl glass px-12 shadow-lg">
         <img src={pokeball} alt="pokeball" className='h-10' />
         <div className="flex-1">
           <a className="text-xl font-bold">Pokédex</a>
         </div>
-        <div className="flex-none">
-
-        </div>
-      </div>
+      </nav>
       <div className='p-8 sm:p-12'>
         <div className='flex flex-col-reverse md:flex-row-reverse justify-center items-center md:items-start gap-8'>
+          {/* MODAL FOR DETAILED PREVIEW */}
           <Modal selectedPokemon={selectedPokemon} />
 
           {/* CARDS SECTION */}
@@ -104,15 +106,18 @@ function Home() {
             {filteredPokemon.slice(0, previewCount).map(pokemon => (
               <Card key={pokemon.id} id={pokemon.id} setSelectedID={setSelectedPokemon} />
             ))}
-            {filteredPokemon.length === 0 &&
 
+            {/* conditional no pokemon found message */}
+            {filteredPokemon.length === 0 && !initialFetch &&
               <div className='flex flex-col items-center justify-center gap-4 p-4'>
                 <h1 className='text-4xl font-bold text-pokered'>No Pokémon found</h1>
                 <p className='text-gray-800'>Try clearing the filters or check your search terms.</p>
               </div>
             }
+
             {/* click to load more (blank card) */}
             <div className={"card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-0 " + (previewCount > 10 ? "hidden" : "block")}
+              // uncap the preview count to show at most 100 pokemons
               onClick={() => { setPreviewCount(100) }}
             >
               <figure>
@@ -134,19 +139,19 @@ function Home() {
 
           </section>
 
-          {/* FILTER CONTROLS */}
+          {/* FILTER CONTROLS CARD */}
           <section className='flex flex-col justify-center h-fit bg-pokered glass card rounded-3xl shadow-lg text-white p-8 gap-5 grow min-w-[300px] sm:max-w-[400px]'>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pokémon_logo.svg/1200px-International_Pokémon_logo.svg.png" alt="" />
             <div className="flex flex-row items-center justify-between p-4 pb-0 pr-0 gap-4">
               <h3 className="font-bold text-2xl sm:text-4xl"> Filter by:</h3>
               <button
                 className='btn bg-pokedarkred/50 text-white border-0 shadow-md shadow-red-900 rounded-full'
-                onClick={clearFilters}
-              >
+                onClick={clearFilters}>
                 clear
               </button>
             </div>
 
+            {/* FILTER INPUTS */}
             <div className="card bg-pokedarkred/30 rounded-2xl flex flex-col gap-1 text-gray-800 p-6">
               {/* name search input */}
               <label className="input w-full">
@@ -171,24 +176,24 @@ function Home() {
                 />
               </label>
             </div>
-
+            
+            {/* apply filters button */}
             <div className="flex justify-center w-full">
               <button
                 className='btn rounded-full bg-pokeyellow text-gray-800 border-0 shadow-md shadow-yellow-900 w-4/5'
                 onClick={() => {
                   applyFilters();
-                  // also remove the "click to load more" card
+                  // also disable the "click to load more" card
                   setPreviewCount(100);
-                }}
-              >
+                }}>
                 apply
               </button>
             </div>
           </section>
         </div>
-
       </div>
-      {/* back to top button */}
+
+      {/* BACK TO TOP BUTTON (STICKY AND FLOATING)*/}
       <button
         className={"btn border-0 text-base fixed bottom-8 left-1/2 transform -translate-x-1/2 py-4 sm:py-2 px-4 z-50 bg-pokeyellow text-gray-800 rounded-full shadow-md hover:bg-yellow-500 transition-all duration-300 " + (showScrollButton ? "" : "opacity-0 z-[-1]")}
         onClick={scrollToTop}
