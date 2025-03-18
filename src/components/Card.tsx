@@ -41,11 +41,11 @@ function Card({ id, setSelectedID }: { id: number; setSelectedID: React.Dispatch
             }}>
             <div className={"relative " + (isImageLoading ? "hidden" : "block")}>
                 {/* washed-out background Pokemon name */}
-                <p className="text-9xl absolute -translate-x-36 translate-y-36 font-bold w-fit"
+                <p className="text-9xl absolute -translate-x-36 translate-y-36 font-bold w-fit line-clamp-1"
                     style={{ color: bgColor, padding: "5px 10px", borderRadius: "10px" }}>
                     {pokemonDetails?.name.toUpperCase()}
                 </p>
-                <p className="text-9xl absolute -translate-x-5 translate-y-8 font-bold w-fit"
+                <p className="text-9xl absolute -translate-x-5 translate-y-8 font-bold w-fit line-clamp-1"
                     style={{ color: bgColor, padding: "5px 10px", borderRadius: "10px" }}>
                     {pokemonDetails?.name.toUpperCase()}
                 </p>
