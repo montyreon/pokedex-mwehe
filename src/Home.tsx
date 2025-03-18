@@ -24,7 +24,7 @@ function Home() {
       }));
       setAllPokemon(pokemonList);
       // initially display all pokemon
-      setFilteredPokemon(pokemonList); 
+      setFilteredPokemon(pokemonList);
       // this is for displaying the appropriate skeleton cards for the initial load
       setInitialFetch(false);
     };
@@ -33,12 +33,13 @@ function Home() {
   }, []);
 
 
-  // FILTERING FUNCTIONS ========================================
+  // FILTERING & SORTING FUNCTIONS ========================================
 
   // input fields for user typing (not applied yet)
   const [tempSearchName, setTempSearchName] = useState<string>('');
   const [tempSearchId, setTempSearchId] = useState<string>('');
   const [previewCount, setPreviewCount] = useState<number>(10);
+  const [sortOption, setSortOption] = useState<string>('name-asc');
 
   // applied filter values
   const [searchName, setSearchName] = useState<string>('');
@@ -74,7 +75,7 @@ function Home() {
   useEffect(() => {
     const handleScroll = () => {
       // show scroll up button when not at the top
-      setShowScrollButton(window.scrollY > 100); 
+      setShowScrollButton(window.scrollY > 100);
       // hide button again when at the very bottom
       setShowScrollButton(window.scrollY < document.body.scrollHeight - window.innerHeight - 100); // 100px from bottom
     };
@@ -152,7 +153,7 @@ function Home() {
             </div>
 
             {/* FILTER INPUTS */}
-            <div className="card bg-pokedarkred/30 rounded-2xl flex flex-col gap-1 text-gray-800 p-6">
+            <div className="card bg-pokedarkred/30 rounded-2xl flex flex-col gap-1 text-gray-800 p-6 gap-2">
               {/* name search input */}
               <label className="input w-full">
                 <Search className='text-gray-400' strokeWidth={1.75} />
@@ -175,8 +176,33 @@ function Home() {
                   onChange={(e) => setTempSearchId(e.target.value)}
                 />
               </label>
+              <div className="w-full card flex flex-row justify-between items-center bg-pokedarkred/50 px-3 py-1">
+                <p className='text-white line-clamp-1 grow w-min'>Sort by: </p>
+                <div className="dropdown dropdown-end">
+                  <div tabIndex={0} role="button" className="btn m-1 flex flex-row font-normal justify-center items-center grow min-w-2/5 max-w-32 bg-pokeblue shadow-sm shadow-gray-600 text-gray-900 border-none ">
+                    <p className='line-clamp-1'>
+                      {sortOption === 'name-asc' ? '⬆️ Name' :
+                        sortOption === 'name-desc' ? '⬇️ Name' :
+                          sortOption === 'id-asc' ? '⬆️ ID' :
+                            sortOption === 'id-desc' ? '⬇️ ID' :
+                              sortOption === 'type-asc' ? '⬆️ Type' :
+                                sortOption === 'type-desc' ? '⬇️ Type' : '⬆️ Name'}
+                    </p>
+                  </div>
+                  <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                    <li><a className={sortOption === 'name-asc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('name-asc')}>⬆️ Name</a></li>
+                    <li><a className={sortOption === 'name-desc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('name-desc')}>⬇️ Name</a></li>
+                    <li><a className={sortOption === 'id-asc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('id-asc')}>⬆️ ID</a></li>
+                    <li><a className={sortOption === 'id-desc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('id-desc')}>⬇️ ID</a></li>
+                    <li><a className={sortOption === 'type-asc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('type-asc')}>⬆️ Type</a></li>
+                    <li><a className={sortOption === 'type-desc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('type-desc')}>⬇️ Type</a></li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            
+
+
+
             {/* apply filters button */}
             <div className="flex justify-center w-full">
               <button
