@@ -1,54 +1,56 @@
-# React + TypeScript + Vite
+# 📖 Pokédex
+## Old St. Labs Internship Technical Assessment
+_Developed by: Jerico Roen B. de Vega_
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based **Pokédex** application built using **React, TypeScript, and Tailwind CSS**, designed to provide an interactive catalog of Pokémon. This project utilizes the **PokéAPI** to dynamically fetch and display Pokémon data.
 
-Currently, two official plugins are available:
+🚀 **Live Deployment:** [montyreon.github.io/pokedex-mwehe/](https://montyreon.github.io/pokedex-mwehe/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 Features
 
-## Expanding the ESLint configuration
+- **Pokémon Listing**
+  - Displays Pokémon with their **ID, Name, Image, and Type(s)**
+  - Initially displays 10 cards, with a **load more** trigger card
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Search, Filter, and Sort**
+  - Search Pokémon by **ID** or **Name**
+  - Filter results based on **ID** or **Name**
+  - Sort Pokémon by **ID** or **Name**
+  - Limit for display count
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Detailed Pokémon Information**
+  - Displays **Height, Weight, Types, Stats, and Evolution Chain**
+  - Automatically derives **Weaknesses** based on Pokémon Type
+  - Includes **Previous** and **Next** navigation for seamless browsing
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **Optimized User Experience**
+  - Responsive (desktop, tablet, and mobile sizes) and mobile-friendly interface
+  - Fast performance using **Vite** as the build tool
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📸 Application Screenshots
+<img width="1574" alt="image" src="https://github.com/user-attachments/assets/28c72a30-bc96-492f-aed0-f005c55842bc" />
+<img width="1574" alt="image" src="https://github.com/user-attachments/assets/7f65a9a6-bb7e-4c0a-84a6-dd5ab1e81bcc" />
+<img width="686" alt="image" src="https://github.com/user-attachments/assets/f72c843e-9277-4cee-b232-1e0fa0a7facb" />
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+
+## 🛠️ Technology Stack
+
+- **Frontend:** React (with TypeScript)
+- **Styling:** Tailwind CSS
+- **Data Source:** [PokéAPI](https://pokeapi.co/)
+- **Build Tool:** Vite
+
+## 📡 API References
+
+- **Pokémon Data:** [PokéAPI](https://pokeapi.co/)
+- **Pokémon Images:**
+
+## 📜 Disclaimer
+
+Pokémon images and data © 2025 Pokémon.  
+Pokémon and Pokémon character names are trademarks of **Nintendo, Game Freak, and Creatures**.  
+This webpage uses data from **PokéAPI**.
+
+_This README file is co-created by ChatGPT._
+
+
