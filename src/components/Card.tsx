@@ -55,7 +55,7 @@ function Card({ id, setSelectedID }: { id: number; setSelectedID: React.Dispatch
             </div>
             <figure>
                 {isImageLoading && (
-                    <div className="bg-gray-100 h- skeleton w-28 rounded-3xl grow"></div>
+                    <div className="bg-gray-100 h-60 skeleton w-28 rounded-3xl grow"></div>
                 )}
                 <img
                     src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}

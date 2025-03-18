@@ -39,7 +39,7 @@ function Home() {
   const [tempSearchName, setTempSearchName] = useState<string>('');
   const [tempSearchId, setTempSearchId] = useState<string>('');
   const [previewCount, setPreviewCount] = useState<number>(10);
-  const [sortOption, setSortOption] = useState<string>('name-asc');
+  const [sortOption, setSortOption] = useState<string>('id-asc');
 
   // applied filter values
   const [searchName, setSearchName] = useState<string>('');
@@ -91,7 +91,7 @@ function Home() {
     setTempSearchId('');
     setSearchName('');
     setSearchId('');
-    setSortOption('name-asc');
+    setSortOption('id-asc');
   };
 
 
@@ -124,7 +124,7 @@ function Home() {
           <a className="text-xl font-bold">Pokédex</a>
         </div>
       </nav>
-      <div className='p-8 sm:p-12'>
+      <div className='min-h-screen p-8 sm:p-12'>
         <div className='flex flex-col-reverse items-center justify-center max-w-full gap-8 md:flex-row-reverse md:items-start'>
           {/* MODAL FOR DETAILED PREVIEW */}
           <Modal selectedPokemon={selectedPokemon} />
@@ -137,7 +137,7 @@ function Home() {
 
             {/* conditional no pokemon found message */}
             {filteredPokemon.length === 0 && !initialFetch &&
-              <div className='flex flex-col items-center justify-center gap-4 p-4'>
+              <div className='flex flex-col items-center justify-center w-full gap-4 p-4 my-16 text-center'>
                 <h1 className='text-4xl font-bold text-pokered'>No Pokémon found</h1>
                 <p className='text-gray-800'>Try clearing the filters or check your search terms.</p>
               </div>
@@ -182,9 +182,9 @@ function Home() {
             </div>
 
             {/* FILTER INPUTS */}
-            <div className="flex flex-col gap-2 p-6 text-gray-800 card bg-pokedarkred/30 rounded-2xl">
+            <div className="flex flex-col gap-2 p-2 text-gray-800 card bg-pokedarkred/50 rounded-2xl">
               {/* name search input */}
-              <label className="w-full input">
+              <label className="w-full rounded-lg input rounded-t-xl">
                 <Search className='text-gray-400' strokeWidth={1.75} />
                 <input
                   type="search"
@@ -195,7 +195,7 @@ function Home() {
                 />
               </label>
               {/* pokemon id search input */}
-              <label className="w-full input">
+              <label className="w-full rounded-lg input">
                 <StickyNote className='text-gray-400' strokeWidth={1.75} />
                 <input
                   type="number"
@@ -205,10 +205,10 @@ function Home() {
                   onChange={(e) => setTempSearchId(e.target.value)}
                 />
               </label>
-              <div className="flex flex-row items-center justify-between w-full px-3 py-1 card bg-pokedarkred/50">
+              <div className="flex flex-row items-center justify-between w-full px-3 py-1 card bg-pokedarkred/50 rounded-xl">
                 <p className='text-white line-clamp-1 grow w-min'>Sort by: </p>
                 <div className="dropdown dropdown-end">
-                  <div tabIndex={0} role="button" className="flex flex-row items-center justify-center m-1 font-normal text-gray-800 border-none shadow-sm btn grow min-w-2/5 max-w-32 bg-pokeblue shadow-gray-600 ">
+                  <div tabIndex={0} role="button" className="flex flex-row items-center justify-center m-1 font-normal text-white border-none shadow-sm btn grow min-w-2/5 max-w-32 bg-pokeblue shadow-gray-600 ">
                     <p className='line-clamp-1'>
                       {sortOption === 'name-asc' ? '⬆️ Name' :
                         sortOption === 'name-desc' ? '⬇️ Name' :
