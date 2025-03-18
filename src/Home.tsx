@@ -22,7 +22,8 @@ function Home() {
         name: pokemon.name,
       }));
       setAllPokemon(pokemonList);
-      setFilteredPokemon(pokemonList); // initially display all pokemon
+      // initially display all pokemon
+      setFilteredPokemon(pokemonList); 
     };
 
     fetchAllPokemon();
@@ -65,11 +66,14 @@ function Home() {
   };
 
 
-  // track if window scrolled down
+  // SCROLL TO TOP BUTTON MECHANISM ========================================
   const [showScrollButton, setShowScrollButton] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
-      setShowScrollButton(window.scrollY > 100); // Show when scrolled down 100px
+      // show scroll up button when not at the top
+      setShowScrollButton(window.scrollY > 100); 
+      // hide button again when at the very bottom
+      setShowScrollButton(window.scrollY < document.body.scrollHeight - window.innerHeight - 100); // 100px from bottom
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
