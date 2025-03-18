@@ -47,18 +47,42 @@ function Home() {
 
   // apply filters only when "apply" is clicked
   const applyFilters = () => {
+    // apply sorting
+    let sorted = [...allPokemon];
+    switch (sortOption) {
+      case 'name-asc':
+        sorted = sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'name-desc':
+        sorted = sorted.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case 'id-asc':
+        sorted = sorted.sort((a, b) => a.id - b.id);
+        break;
+      case 'id-desc':
+        sorted = sorted.sort((a, b) => b.id - a.id);
+        break;
+      case 'type-asc':
+        sorted = sorted.sort((a, b) => a.types[0].type.name.localeCompare(b.types[0].type.name));
+        break;
+      case 'type-desc':
+        sorted = sorted.sort((a, b) => b.types[0].type.name.localeCompare(a.types[0].type.name));
+        break;
+      default:
+        break;
+    }
+    setAllPokemon(sorted);
     setSearchName(tempSearchName);
     setSearchId(tempSearchId);
   };
 
   // update the displayed pokemon when filters change
   useEffect(() => {
-    setFilteredPokemon(
-      allPokemon.filter(pokemon =>
-        (searchName === '' || pokemon.name.toLowerCase().includes(searchName.toLowerCase())) &&
-        (searchId === '' || pokemon.id.toString().includes(searchId))
-      )
+    let filtered = allPokemon.filter(pokemon =>
+      (searchName === '' || pokemon.name.toLowerCase().includes(searchName.toLowerCase())) &&
+      (searchId === '' || pokemon.id.toString().includes(searchId))
     );
+    setFilteredPokemon(filtered);
   }, [searchName, searchId, allPokemon]);
 
   // clear all filters
@@ -67,6 +91,7 @@ function Home() {
     setTempSearchId('');
     setSearchName('');
     setSearchId('');
+    setSortOption('name-asc');
   };
 
 
@@ -189,14 +214,14 @@ function Home() {
                                 sortOption === 'type-desc' ? '⬇️ Type' : '⬆️ Name'}
                     </p>
                   </div>
-                  <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                    <li><a className={sortOption === 'name-asc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('name-asc')}>⬆️ Name</a></li>
-                    <li><a className={sortOption === 'name-desc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('name-desc')}>⬇️ Name</a></li>
-                    <li><a className={sortOption === 'id-asc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('id-asc')}>⬆️ ID</a></li>
-                    <li><a className={sortOption === 'id-desc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('id-desc')}>⬇️ ID</a></li>
-                    <li><a className={sortOption === 'type-asc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('type-asc')}>⬆️ Type</a></li>
-                    <li><a className={sortOption === 'type-desc' ? 'bg-gray-200' : ''} onClick={() => setSortOption('type-desc')}>⬇️ Type</a></li>
-                  </ul>
+                    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                    <li><a className={sortOption === 'name-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ Name</a></li>
+                    <li><a className={sortOption === 'name-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Name</a></li>
+                    <li><a className={sortOption === 'id-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ ID</a></li>
+                    <li><a className={sortOption === 'id-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ ID</a></li>
+                    <li><a className={sortOption === 'type-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('type-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ Type</a></li>
+                    <li><a className={sortOption === 'type-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('type-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Type</a></li>
+                    </ul>
                 </div>
               </div>
             </div>
