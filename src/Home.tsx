@@ -130,7 +130,7 @@ function Home() {
           <Modal selectedPokemon={selectedPokemon} />
 
           {/* CARDS SECTION */}
-          <section className='flex flex-wrap justify-center md:justify-start gap-6 flex-[2]'>
+            <section className='flex flex-wrap justify-center md:justify-start gap-6 flex-[2] max-w-full'>
             {filteredPokemon.slice(0, previewCount).map(pokemon => (
               <Card key={pokemon.id} id={pokemon.id} setSelectedID={setSelectedPokemon} />
             ))}

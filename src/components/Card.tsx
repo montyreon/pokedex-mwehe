@@ -7,11 +7,13 @@ function Card({ id, setSelectedID }: { id: number; setSelectedID: React.Dispatch
 
     const [pokemonDetails, setPokemonDetails] = useState<Pokemon | null>();
     const [isImageLoading, setIsImageLoading] = useState(true);
+    const [isDataLoading, setIsDataLoading] = useState(true);
 
     // upon load of card, fetch the pokemon details
     useEffect(() => {
         axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`).then(response => {
             setPokemonDetails(response.data);
+            setIsDataLoading(false);
         });
 
     }, []);
@@ -35,48 +37,60 @@ function Card({ id, setSelectedID }: { id: number; setSelectedID: React.Dispatch
 
     return (
         <div className="card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-0"
+            // open modal on click of card
             onClick={() => {
-                (document.getElementById('mowdal') as HTMLDialogElement).showModal();
                 setSelectedID(id);
+                (document.getElementById('mowdal') as HTMLDialogElement).showModal();
             }}>
             <div className={"relative " + (isImageLoading ? "hidden" : "block")}>
                 {/* washed-out background Pokemon name */}
-                <p className="text-9xl absolute -translate-x-36 translate-y-36 font-bold w-fit line-clamp-1"
+                <p className="absolute font-bold text-9xl -translate-x-36 translate-y-36 w-fit line-clamp-1"
                     style={{ color: bgColor, padding: "5px 10px", borderRadius: "10px" }}>
                     {pokemonDetails?.name.toUpperCase()}
                 </p>
-                <p className="text-9xl absolute -translate-x-5 translate-y-8 font-bold w-fit line-clamp-1"
+                <p className="absolute font-bold -translate-x-5 translate-y-8 text-9xl w-fit line-clamp-1"
                     style={{ color: bgColor, padding: "5px 10px", borderRadius: "10px" }}>
                     {pokemonDetails?.name.toUpperCase()}
                 </p>
             </div>
             <figure>
                 {isImageLoading && (
-                    <div className="skeleton w-28 h-64 rounded-3xl bg-gray-100 grow"></div>
+                    <div className="bg-gray-100 h- skeleton w-28 rounded-3xl grow"></div>
                 )}
                 <img
-
                     src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
                     className={`drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl grow ${isImageLoading ? "hidden" : "block"}`}
                     onLoad={() => setIsImageLoading(false)} // hide skeleton when image loads
                 />
             </figure>
-            <div className="card-body p-4 pb-0 z-10">
+            <div className="z-10 p-4 pb-0 card-body">
                 {/* POKEMON ID */}
-                <h3 className="text-gray-500">#{pokeID}</h3>
+                {isDataLoading ? (
+                    <div className="w-16 h-6 bg-gray-100 rounded skeleton"></div>
+                ) : (
+                    <h3 className="text-gray-500">#{pokeID}</h3>
+                )}
 
                 {/* POKEMON TYPE BADGE */}
-                <div className="flex flex-row justify-between gap-4 flex-wrap">
-                    <h2 className="card-title">{pokemonDetails?.name.toUpperCase()}</h2>
+                <div className="flex flex-row flex-wrap justify-between gap-4">
+                    {isDataLoading ? (
+                        <div className="w-24 h-8 bg-gray-100 rounded skeleton"></div>
+                    ) : (
+                        <h2 className="card-title">{pokemonDetails?.name.toUpperCase()}</h2>
+                    )}
 
-                    <div className="flex flex-row gap-2 justify-end w-full">
-                        {pokemonDetails?.types.map((type, index) => (
-                            <span key={index}
-                                className="text-white rounded-full badge shadow-sm h-8 w-fit p-3 border-0"
-                                style={{ backgroundColor: typeColors[type.type.name] }}>
-                                {type.type.name}
-                            </span>
-                        ))}
+                    <div className="flex flex-row justify-end w-full gap-2">
+                        {isDataLoading ? (
+                            <div className="w-16 h-8 bg-gray-100 rounded skeleton"></div>
+                        ) : (
+                            pokemonDetails?.types.map((type, index) => (
+                                <span key={index}
+                                    className="h-8 p-3 text-white border-0 rounded-full shadow-sm badge w-fit"
+                                    style={{ backgroundColor: typeColors[type.type.name] }}>
+                                    {type.type.name}
+                                </span>
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
