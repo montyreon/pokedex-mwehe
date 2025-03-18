@@ -1,5 +1,5 @@
 import Card from './components/Card';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal } from './components/Modal';
 import { Pokemon } from './model/types';
@@ -77,6 +77,7 @@ function Home() {
     setFilteredPokemon(filtered);
     setSearchName(tempSearchName);
     setSearchId(tempSearchId);
+
   };
 
   // update the displayed pokemon when filters change
@@ -96,6 +97,7 @@ function Home() {
     setSearchId('');
     setSortOption('id-asc');
     setdisplayLimit(25);
+    setFilteredPokemon(allPokemon);
   };
 
   useEffect(() => {
@@ -103,8 +105,8 @@ function Home() {
   }, [searchName, searchId, sortOption]);
 
   useEffect(() => {
-    const limit = displayLimit === 1025 ? allPokemon.length : displayLimit;
-    setFilteredPokemon(allPokemon.slice(0, limit));
+    const limit = displayLimit === 1025 ? filteredPokemon.length : displayLimit;
+    setFilteredPokemon(filteredPokemon.slice(0, limit));
   }, [displayLimit, allPokemon]);
 
   // SCROLL TO TOP BUTTON MECHANISM ========================================
