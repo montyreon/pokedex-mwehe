@@ -125,12 +125,12 @@ function Home() {
         </div>
       </nav>
       <div className='p-8 sm:p-12'>
-        <div className='flex flex-col-reverse items-center justify-center gap-8 md:flex-row-reverse md:items-start'>
+        <div className='flex flex-col-reverse items-center justify-center max-w-full gap-8 md:flex-row-reverse md:items-start'>
           {/* MODAL FOR DETAILED PREVIEW */}
           <Modal selectedPokemon={selectedPokemon} />
 
           {/* CARDS SECTION */}
-            <section className='flex flex-wrap justify-center md:justify-start gap-6 flex-[2] max-w-full'>
+          <section className='flex flex-wrap justify-center md:justify-start gap-6 flex-[2] max-w-full'>
             {filteredPokemon.slice(0, previewCount).map(pokemon => (
               <Card key={pokemon.id} id={pokemon.id} setSelectedID={setSelectedPokemon} />
             ))}
@@ -144,22 +144,24 @@ function Home() {
             }
 
             {/* click to load more (blank card) */}
-            <div className={"card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-0 " + (previewCount > 10 ? "hidden" : "block")}
+            <div className={"card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-1 sm:max-h-[120rem] max-w-[30rem] " + (previewCount > 10 ? "hidden" : "block")}
               // uncap the preview count to show at most 100 pokemons
-              onClick={() => { setPreviewCount(100) }}
+              onClick={() => { setPreviewCount(100) }
+            }
             >
-              <figure>
-                <div className="flex flex-col items-center justify-center h-64 text-gray-500 bg-gray-100 skeleton w-28 rounded-3xl grow">
+              <figure className="flex flex-col items-center justify-center w-full text-gray-500 bg-gray-100 grow min-h-64 skeleton rounded-3xl">
+                <div className="">
                   Click to load more...
                 </div>
               </figure>
-              <div className="z-10 p-4 pb-0 card-body">
-                <h3 className="text-gray-200">#----</h3>
-                <div className="flex flex-row flex-wrap justify-between gap-4">
+              <div className="z-10 flex-col justify-between p-4 pb-0 card-body">
+                <div>
+                  <h3 className="text-gray-200">#----</h3>
                   <h2 className="w-24 bg-gray-100 rounded-full card-title skeleton min-h-6"></h2>
-
+                </div>
+                <div className="flex flex-row flex-wrap justify-between gap-4">
                   <div className="flex flex-row justify-end w-full gap-2">
-                    <span className='w-16 text-gray-100 badge skeleton'></span>
+                    <span className='w-16 text-gray-100 rounded-full badge skeleton'></span>
                   </div>
                 </div>
               </div>
@@ -217,14 +219,14 @@ function Home() {
                     </p>
                     {/* dropdown for sort options */}
                   </div>
-                    <ul tabIndex={0} className="p-2 shadow-sm dropdown-content menu bg-base-100 rounded-box z-1 w-52">
+                  <ul tabIndex={0} className="p-2 shadow-sm dropdown-content menu bg-base-100 rounded-box z-1 w-52">
                     <li><a className={sortOption === 'name-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ Name</a></li>
                     <li><a className={sortOption === 'name-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Name</a></li>
                     <li><a className={sortOption === 'id-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ ID</a></li>
                     <li><a className={sortOption === 'id-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ ID</a></li>
                     <li><a className={sortOption === 'type-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('type-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ Type</a></li>
                     <li><a className={sortOption === 'type-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('type-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Type</a></li>
-                    </ul>
+                  </ul>
                 </div>
               </div>
             </div>

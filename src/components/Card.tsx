@@ -36,7 +36,7 @@ function Card({ id, setSelectedID }: { id: number; setSelectedID: React.Dispatch
     const bgColor = hexToRGBA(typeColors[firstType], 0.1); // light opacity
 
     return (
-        <div className="card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-0"
+        <div className="card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-1 sm:max-h-[120rem] max-w-[30rem] "
             // open modal on click of card
             onClick={() => {
                 setSelectedID(id);
@@ -59,7 +59,7 @@ function Card({ id, setSelectedID }: { id: number; setSelectedID: React.Dispatch
                 )}
                 <img
                     src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${pokeID}.png`}
-                    className={`drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl grow ${isImageLoading ? "hidden" : "block"}`}
+                    className={`drop-shadow-sm hover:translate-y-2 duration-500 hover:scale-105 hover:drop-shadow-xl grow sm:grow-0 ${isImageLoading ? "hidden" : "block"}`}
                     onLoad={() => setIsImageLoading(false)} // hide skeleton when image loads
                 />
             </figure>
