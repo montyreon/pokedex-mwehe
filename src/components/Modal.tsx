@@ -67,10 +67,27 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
     let pokeID = previewedPokemon.toString().padStart(3, "0");
 
     const changePokemon = (newID: number) => {
-        if (newID > 0 && newID < 1010) {
+        if (newID > 0 && newID < 1026) {
             setPreviewedPokemon(newID);
         }
     };
+
+    // keyboard navigation
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "ArrowLeft" && previewedPokemon > 1) {
+                changePokemon(previewedPokemon - 1);
+            }
+            if (event.key === "ArrowRight" && previewedPokemon < 1025) {
+                changePokemon(previewedPokemon + 1);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [previewedPokemon]); // Runs when previewedPokemon changes
 
     return (
         <dialog id="mowdal" className="w-auto modal">
@@ -110,15 +127,15 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                         </div>
                         {/* LEFT RIGHT NAVIGATION */}
                         <div className="flex flex-row items-center justify-center gap-4">
-                            <button onClick={() => changePokemon(previewedPokemon - 1)} className="text-white bg-gray-800 border-0 btn">◀</button>
+                            <button onClick={() => changePokemon(previewedPokemon - 1)} className={"text-white bg-gray-800 border-0 btn " + (previewedPokemon == 1 ? " opacity-60 pointer-events-none cursor-default" : "")}>◀</button>
                             <div className="bg-gray-50 rounded-2xl drop-shadow-lg">
                                 <img className="drop-shadow-md min-h-24 min-w-24" src={pokemonDetails?.sprites.front_default} alt={"sprite of " + pokemonDetails?.name} />
                             </div>
-                            <button onClick={() => changePokemon(previewedPokemon + 1)} className="text-white bg-gray-800 border-0 btn">▶</button>
+                            <button onClick={() => changePokemon(previewedPokemon + 1)} className={"text-white bg-gray-800 border-0 btn " + (previewedPokemon == 1025 ? " opacity-60 pointer-events-none cursor-default" : "")}>▶</button>
                         </div>
                         <div className="flex flex-row items-end justify-center w-full gap-2 grow">
                             <div className="hidden text-sm text-center text-white sm:block">
-                                Click anywhere outside or press <kbd className="text-black kbd"
+                                Click anywhere outside or press <kbd className="text-black kbd hover:cursor-pointer hover:bg-gray-200 active:bg-gray-300"
                                     onClick={() => (document.getElementById('mowdal') as HTMLDialogElement).close()}
                                 >esc</kbd> to exit.
                             </div>
@@ -219,9 +236,9 @@ export function Modal({ selectedPokemon }: { selectedPokemon: number }) {
                                             </div>
                                             {index < evolutionChain.length - 1 && <span className="px-2 mb-4 text-xl sm:hidden">
                                                 {["vaporeon", "jolteon", "flareon", "espeon", "umbreon", "leafeon", "glaceon", "sylveon"].includes(evolution.name.toLowerCase()) ? "or" : "↓"}
-                                    
-                                                </span>}</>
-                                            
+
+                                            </span>}</>
+
                                     ))}
                                 </div>
                             ) : (

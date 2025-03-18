@@ -62,12 +62,6 @@ function Home() {
       case 'id-desc':
         sorted = sorted.sort((a, b) => b.id - a.id);
         break;
-      case 'type-asc':
-        sorted = sorted.sort((a, b) => a.types[0].type.name.localeCompare(b.types[0].type.name));
-        break;
-      case 'type-desc':
-        sorted = sorted.sort((a, b) => b.types[0].type.name.localeCompare(a.types[0].type.name));
-        break;
       default:
         break;
     }
@@ -93,6 +87,10 @@ function Home() {
     setSearchId('');
     setSortOption('id-asc');
   };
+
+  useEffect(() => {
+    applyFilters();
+  }, [searchName, searchId, sortOption]);
 
 
   // SCROLL TO TOP BUTTON MECHANISM ========================================
@@ -147,7 +145,7 @@ function Home() {
             <div className={"card rounded-4xl bg-base-100 shadow-sm p-8 px-4 basis-1/5 min-w-64 hover:-translate-y-2 duration-300 transition hover:cursor-pointer hover:shadow-xl hover:outline-4 overflow-hidden hover:scale-[1.02] grow sm:grow-1 sm:max-h-[120rem] max-w-[30rem] " + (previewCount > 10 ? "hidden" : "block")}
               // uncap the preview count to show at most 100 pokemons
               onClick={() => { setPreviewCount(100) }
-            }
+              }
             >
               <figure className="flex flex-col items-center justify-center w-full text-gray-500 bg-gray-100 grow min-h-64 skeleton rounded-3xl">
                 <div className="">
@@ -213,9 +211,8 @@ function Home() {
                       {sortOption === 'name-asc' ? '⬆️ Name' :
                         sortOption === 'name-desc' ? '⬇️ Name' :
                           sortOption === 'id-asc' ? '⬆️ ID' :
-                            sortOption === 'id-desc' ? '⬇️ ID' :
-                              sortOption === 'type-asc' ? '⬆️ Type' :
-                                sortOption === 'type-desc' ? '⬇️ Type' : '⬆️ Name'}
+                            sortOption === 'id-desc' ? '⬇️ ID'
+                            : '↕️ Sort'}
                     </p>
                     {/* dropdown for sort options */}
                   </div>
@@ -224,8 +221,6 @@ function Home() {
                     <li><a className={sortOption === 'name-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('name-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Name</a></li>
                     <li><a className={sortOption === 'id-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ ID</a></li>
                     <li><a className={sortOption === 'id-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('id-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ ID</a></li>
-                    <li><a className={sortOption === 'type-asc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('type-asc'); (document.activeElement as HTMLElement)?.blur(); }}>⬆️ Type</a></li>
-                    <li><a className={sortOption === 'type-desc' ? 'bg-gray-200' : ''} onClick={() => { setSortOption('type-desc'); (document.activeElement as HTMLElement)?.blur(); }}>⬇️ Type</a></li>
                   </ul>
                 </div>
               </div>
